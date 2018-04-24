@@ -13,6 +13,8 @@ stats = null;
 /// A boolean to know if the left button of the mouse is down
 mouseDown = false;
 
+mousePos = {x:0, y:0};
+
 /// It creates the GUI and, optionally, adds statistic information
 /**
  * @param withStats - A boolean to show the statictics or not
@@ -77,6 +79,11 @@ function onMouseDown (event) {
   }
 }
 
+function onMouseMove(event) {
+  var tx = -1 + (event.clientX / window.innerWidth)*2;
+  var ty = 1 - (event.clientY / window.innerHeight)*2;
+  mousePos = {x:tx, y:ty};
+}
 
 /// It processes the wheel rolling of the mouse
 /**
@@ -116,10 +123,27 @@ function createRenderer () {
   return renderer;  
 }
 
+function updateCar() {
+  var targetX = normalize(mousePos.x, -1, 1, -100, 100);
+  var targetY = normalize(mousePos.y, -1, 1, 25, 175);
+
+  room.updateCar(targetX, targetY);
+}
+
+function normalize(v, vmin, vmax, tmin, tmax) {
+  var nv = Math.max (Math.min(v, vmax), vmin);
+  var dv = vmax-vmin;
+  var pc = (nv-vmin)/dv;
+  var dt = tmax - tmin;
+  var tv = tmin + (pc * dt);
+  return tv;
+}
+
 /// It renders every frame
 function render() {
   requestAnimationFrame(render);
-  
+  room.update();
+  updateCar();
   stats.update();
   room.getCameraControls().update ();
   //room.animate(GUIcontrols);
@@ -135,6 +159,7 @@ $(function () {
   $("#WebGL-output").append(renderer.domElement);
   // liseners
   window.addEventListener ("resize", onWindowResize);
+  window.addEventListener('mousemove', onMouseMove, false);
   window.addEventListener ("mousedown", onMouseDown, true);
   window.addEventListener ("mousewheel", onMouseWheel, true);   // For Chrome an others
   window.addEventListener ("DOMMouseScroll", onMouseWheel, true); // For Firefox
