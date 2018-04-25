@@ -13,7 +13,11 @@ stats = null;
 /// A boolean to know if the left button of the mouse is down
 mouseDown = false;
 
+// Mouse Position
 mousePos = {x:0, y:0};
+
+// A boolean to know if the game is on pause
+pause = false;
 
 /// It creates the GUI and, optionally, adds statistic information
 /**
@@ -85,6 +89,22 @@ function onMouseMove(event) {
   mousePos = {x:tx, y:ty};
 }
 
+function onKeyDown(event) {
+  event = event || window.event;
+  var keycode = event.keyCode;
+
+  switch(keycode) {
+    case 32: // SPACE BAR
+      console.log("Barra espaciadora pulsada");
+      if (!pause) {
+        pause = true;
+      } else if (pause) {
+        pause = false;
+      }
+      break;
+  }
+}
+
 /// It processes the wheel rolling of the mouse
 /**
  * @param event - Mouse information
@@ -141,13 +161,14 @@ function normalize(v, vmin, vmax, tmin, tmax) {
 
 /// It renders every frame
 function render() {
+  if (!pause) {
+    room.update();
+    updateCar();
+    stats.update();
+    room.getCameraControls().update ();
+    //room.animate(GUIcontrols);
+  }
   requestAnimationFrame(render);
-  room.update();
-  updateCar();
-  stats.update();
-  room.getCameraControls().update ();
-  //room.animate(GUIcontrols);
-  
   renderer.render(room, room.getCamera());
 }
 
@@ -161,6 +182,7 @@ $(function () {
   window.addEventListener ("resize", onWindowResize);
   window.addEventListener('mousemove', onMouseMove, false);
   window.addEventListener ("mousedown", onMouseDown, true);
+  window.addEventListener ("keydown", onKeyDown, false);
   window.addEventListener ("mousewheel", onMouseWheel, true);   // For Chrome an others
   window.addEventListener ("DOMMouseScroll", onMouseWheel, true); // For Firefox
   

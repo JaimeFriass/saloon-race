@@ -14,6 +14,9 @@ class Room extends THREE.Scene {
         this.add(this.car);
         this.createLights();
         this.createCamera(renderer);
+
+        this.fog = new THREE.Fog(new THREE.Color( 0xF5DA81 ), 300, 1000);
+        this.add(this.fog);
       }
 
     createCamera (renderer) {
@@ -84,6 +87,14 @@ class Room extends THREE.Scene {
         //this.car.rotation.y = (this.car.position.z - targetX)*0.0064;
         //this.car.position.x = targetX;
         this.car.position.z = 40 - (targetY - this.car.position.z)*0.4;
+    }
+
+    turnOffLights() {
+        this.spotLight.intensity = this.ambientLight.intensity = 0;
+    }
+
+    turnOnLights() {
+        this.spotLight.intensity = this.ambientLight.intensity = 1;
     }
     
 

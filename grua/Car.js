@@ -12,10 +12,22 @@ class Car extends THREE.Object3D {
 
         super();
         this.ancho = 6;
+        this.lamp1 = null;
+        this.lamp2 = null;
+        this.viewpoint = null;
         this.car = new THREE.Object3D();
         this.createDefinedCar();
         //this.createCar();
         //this.add(this.car);
+    }
+
+    turnOnLamps() {
+        this.lamp1.intensity = 0.7;
+        this.lamp2.intensity = 0.7;
+    }
+
+    turnOffLamps() {
+        this.lamp1.intensity = this.lamp2.intensity = 0;
     }
 
     createDefinedCar() {
@@ -44,6 +56,29 @@ class Car extends THREE.Object3D {
       
         });
         this.add(d_car);
+
+        this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50), 0);
+        this.viewpoint.position.set(0, 20, 240);
+
+        this.lamp1 = new THREE.SpotLight( 0xffffff, 1, 400 );
+        this.lamp2 = new THREE.SpotLight( 0xffffff, 1, 400 );
+        //lamp1.intensity = 0.5;
+        this.lamp1.castShadow = true;
+        this.lamp2.castShadow = true;
+
+        this.lamp1.penumbra = this.lamp2.penumbra = 0.6;
+
+        this.lamp1.target = this.viewpoint;
+        this.lamp2.target= this.viewpoint;
+
+        this.lamp1.position.set(-5, 3,14);
+        this.lamp2.position.set(5, 3, 14);
+
+        this.add(this.lamp1);
+        this.add(this.lamp2);
+
+        this.add(this.viewpoint);
+
         //return d_car;
     }
     createCar() {
@@ -61,6 +96,7 @@ class Car extends THREE.Object3D {
         this.car.add(rueda2);
         this.car.add(rueda3);
         this.car.add(rueda4);
+
 
         this.car.add(this.createBody());
 
@@ -115,4 +151,5 @@ class Car extends THREE.Object3D {
         rueda.castShadow = true;
         return rueda;
     }
+    
 }
