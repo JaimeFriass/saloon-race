@@ -16,11 +16,31 @@
     <script type="text/javascript" src="Car.js"></script>    
     <script type="text/javascript" src="Room.js"></script>    
     <script type="text/javascript" src="Saloon.js"></script>  
-    <script type="text/javascript" src="script.js"></script>    
+    <script type="text/javascript" src="script.js"></script>  
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700" rel="stylesheet">  
     <style>
         body{
             margin: 0;
-            overflow: hidden; 
+            overflow: hidden;
+            font-family: 'Amatic SC', bold; 
+        }
+
+        #level_progress {
+            position: absolute;
+            top: 20px; left: 550px;
+            width: 330px;
+            height: 25px;
+            background-color: rgb(240, 191, 128);
+            border: solid rgb(143, 76, 0) 1px;
+            border-radius: 4px;
+        }
+
+        #level_id {
+            position: absolute;
+            top: 5px; left: 900px;
+            font-size: 30pt;
+            color: black;
+            text-shadow: black 2px 2px 2px;
         }
     </style>
 </head>
@@ -37,5 +57,8 @@
 <!-- Div which will hold the Output -->
 <div id="WebGL-output">
 </div>
+
+<div id="level_progress"></div>
+<div id="level_id">Level 1</div>
 </body>
 </html>
