@@ -7,6 +7,7 @@ var Colors = {
 	blue:0x68c3c0,
 };
 
+
 class Car extends THREE.Object3D {
     constructor() {
 

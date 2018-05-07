@@ -24,13 +24,23 @@
         body{
             margin: 0;
             overflow: hidden;
-            font-family: 'Amatic SC', bold; 
+            font-family: 'Amatic SC', bold;
+            
+            z-index: 1;
+            text-align: center;
+        }
+
+        #game {
+            z-index: 1;
+            display: block;
+            filter: blur(5px); 
+            transition: 1s -webkit-filter linear;
         }
 
         #level_bar {
             position: absolute;
-            top: 20px; left: 350px;
-            width: 330px;
+            top: 20px; left: 200px;
+            width: 35%;
             height: 12px;
             background-color: rgb(240, 191, 128);
             border: solid rgb(143, 76, 0) 1px;
@@ -48,30 +58,136 @@
 
         #level_id {
             position: absolute;
-            top: 5px; left: 900px;
+            top: 5px; left: 100px;
             font-size: 30pt;
+            font-style: bold;
             color: black;
             text-shadow: black 2px 2px 2px;
+        }
+
+        /*
+
+        div.menu {
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            background-color: rgb(240, 158, 51);
+            height: 300px;
+            width: 50%;
+            z-index: 99;
+            border-radius: 5px;
+            filter: none;
+            box-shadow: rgb(80, 57, 8) 4px 4px 10px;
+            display: block;
+            max-width: 400px;
+            transform: rotateZ(3deg);
+            -webkit-transform: rotateZ(3deg);
+            -moz-transform: rotateZ(3deg);
+        }
+        
+        */
+
+        div.menu {
+            display: block;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 1000px;
+            overflow: hidden;
+            padding-top: 250px;
+            z-index: 99;
+        }
+
+        .se-slope{
+            margin: 0 -50px;
+            transform-origin: left center;
+        }
+        .se-slope:nth-child(odd){
+            background: rgba(255, 170, 58, 0.842);
+            transform: rotate(5deg);
+            margin-top: -200px;
+            box-shadow: 0px -1px 3px rgba(0,0,0,0.4);
+        }
+        .se-slope:nth-child(even){
+            background: #ec742f;
+            transform: rotate(-5deg);
+            box-shadow: 0px 2px 3px rgba(0,0,0,0.4) inset;
+        }
+
+        .se-content {
+            margin: 0 auto;
+        }
+
+        .se-slope:nth-child(odd) .se-content{
+            transform: rotate(-5deg);
+            color: #e28800; 
+            padding: 130px 100px 250px 100px;
+        }
+        .se-slope:nth-child(even) .se-content{
+            transform: rotate(5deg);
+            color: #e28800;
+            padding: 150px 100px 250px 100px;
+        }
+            
+        div.menu h2 {
+            font-size: 50pt;
+            color: rgb(150, 89, 10);
+        }
+
+        .se-content a.button {
+            font-size: 25pt;
+            height: 30px;
+            background-color:rgb(255, 221, 128);
+            cursor: pointer;
+            color: black; 
+            box-shadow: black 1px 1px;
+            transition: 0.3s;
+            border-radius: 3px;
+            font-style: bold;   
+            margin: 20px 20px 20px 20px;     
+            padding: 15px 15px 15px 15px;
+        }
+
+        .button::after {
+            padding: 0px 0px 0px 0px;
+        }
+        
+        .button:hover {
+            background-color:rgb(255, 244, 214);
         }
     </style>
 </head>
 <body>
+    <div id="game">
+        <!-- Div which will show statistical information -->
+        <div id="Stats-output">
+        </div>
 
-<!-- Div which will show statistical information -->
-<div id="Stats-output">
-</div>
+        <!-- Div which will show several messages -->
+        <div style="position:absolute; left:100px; top:10px" id="Messages">
+        </div>
 
-<!-- Div which will show several messages -->
-<div style="position:absolute; left:100px; top:10px" id="Messages">
-</div>
+        <!-- Div which will hold the Output -->
+        <div id="WebGL-output">
+        </div>
 
-<!-- Div which will hold the Output -->
-<div id="WebGL-output">
-</div>
+        <div id="level_bar">
+            <div id="level_progress"></div>
+        </div>
+        <div id="level_id">Level 1</div>
+    </div>
 
-<div id="level_bar">
-    <div id="level_progress"></div>
-</div>
-<div id="level_id">Level 1</div>
+    <div id="pause" class="menu">
+        <div class="se-slope">
+            <div class="se-content">
+                <h2>Pause</h2><br>
+                <a class="button" onClick="selectLevel()">CHOOSE LEVEL</a>
+                <a class="button" onClick="hidePause()">SETTINGS</a>
+                <a class="button" onClick="hidePause()">EXIT</a>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

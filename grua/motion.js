@@ -5,27 +5,49 @@ var boxesPool = [];
 var level;
 
 function loop() {
-    console.log
     if (Math.floor(level.distance) % level.distanceForBoxSpawn == 0 && 
         Math.floor(level.distance) > level.boxLastSpawn) {
         level.boxLastSpawn = Math.floor(level.distance);
         boxesHolder.spawnBoxes();
     }
     level.distance++;
+    level.velocity = level.velocity * level.acceleration;
+    room.setVelocity(level.velocity);
+
+    if (level.distance > 1000) {
+        setLevel(level.current + 1);
+    }
 }
 
 function setLevel(num) {
     switch (num) {
         case 1:
             level = {
+                current: 1,
                 velocity: 1.5,
+                acceleration: 1.0001,
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
                 distanceForBoxSpawn: 70,
             };
             room.setVelocity(1.5);
+            document.getElementById("level_id").innerHTML = "Level 1";
             break;
+        case 2:
+            level = {
+                current: 2,
+                velocity: 3,
+                acceleration: 1.0001,
+                distance: 0,
+                life: 100,
+                boxLastSpawn: 0,
+                distanceForBoxSpawn: 40,
+            };
+            room.setVelocity(3);
+            document.getElementById("level_id").innerHTML = "Level 2";
+            break;
+            
     }
 }
 
@@ -95,14 +117,26 @@ function createParticles() {
     room.add(particlesHolder.mesh);
 }
 
+var BoxColor = [
+    0xf25346,
+    0xd8d0d1,
+    0x59332e,
+    0xF5986E,
+    0x23190f,
+    0x68c3c0,
+]
+
+
 Box = function () {
     var geom = new THREE.TetrahedronGeometry(8, 2);
+    var box_color = BoxColor[Math.floor(Math.random()*(BoxColor.length - 1))];
     var mat = new THREE.MeshPhongMaterial({
-        color: Colors.red,
+        color: box_color,
         shininess: 0,
         specular: 0xffffff,
         flatShading: true
     });
+    this.color = box_color;
     this.mesh = new THREE.Mesh(geom, mat);
     this.mesh.castShadow = true;
 }
@@ -144,7 +178,7 @@ BoxesHolder.prototype.update = function (car_position) {
         //console.log(d);
         if (difX < 15 && difY < 15) {
             //console.log("COLISIONA!!");
-            particlesHolder.spawnParticles(box.mesh.position.clone(), 15, Colors[i], 3);
+            particlesHolder.spawnParticles(box.mesh.position.clone(), 15, box.color, 3);
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
             this.mesh.remove(box.mesh);
             collition();

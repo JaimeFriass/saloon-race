@@ -95,11 +95,14 @@ function onKeyDown(event) {
 
   switch(keycode) {
     case 32: // SPACE BAR
-      console.log("Barra espaciadora pulsada");
       if (!pause) {
+        showPause();
         pause = true;
+        console.log("Pausando");
       } else if (pause) {
+        hidePause();
         pause = false;
+        console.log("Despausando");
       }
       break;
   }
@@ -163,6 +166,18 @@ function updateLife() {
   document.getElementById("level_progress").style.width = level.life + "%";
   document.getElementById("level_progress").style.backgroundColor = "red";
   document.getElementById("level_progress").style.backgroundColor = "rgb(240, 158, 51)";
+}
+
+function showPause() {
+  document.getElementById("game").style.filter = "blur(5px)";
+  document.getElementById("pause").style.display = "block";
+  
+}
+
+function hidePause() {
+  document.getElementById("game").style.filter = "none";
+  document.getElementById("pause").style.display = "none";
+  console.log("HIDE PAUSE()");
 }
 
 /// It renders every frame
