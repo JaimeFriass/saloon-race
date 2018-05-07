@@ -188,6 +188,7 @@ $(function () {
   
   // create a room, that will hold all our elements such as objects, cameras and lights.
   room = new Room (renderer.domElement);
+  createParticles();
  
   createGUI(true);
 

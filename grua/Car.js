@@ -21,6 +21,12 @@ class Car extends THREE.Object3D {
         //this.add(this.car);
     }
 
+    getPos() {
+        var globalCarPosition = new THREE.Vector3();
+        globalCarPosition.setFromMatrixPosition(this.matrixWorld);
+        return globalCarPosition;
+    }
+
     turnOnLamps() {
         this.lamp1.intensity = 0.7;
         this.lamp2.intensity = 0.7;

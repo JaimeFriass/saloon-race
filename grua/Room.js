@@ -16,7 +16,7 @@ class Room extends THREE.Scene {
         this.createCamera(renderer);
 
         this.fog = new THREE.Fog(new THREE.Color( 0xF5DA81 ), 300, 1000);
-        this.add(this.fog);
+        //this.add(this.fog);
       }
 
     createCamera (renderer) {
@@ -74,6 +74,18 @@ class Room extends THREE.Scene {
         } else {
             this.spotLight.position.z = 500;
         }
+        var globalBoxPosition = this.saloon.getPosBox();
+        var vectorBetweenObjects = new THREE.Vector2();
+        vectorBetweenObjects.subVectors(new THREE.Vector2 (this.saloon.getPosBox().x, this.saloon.getPosBox().z),
+                                        new THREE.Vector2 (this.car.getPos().x, this.car.getPos().z));
+        
+        //var diffPos = globalCarPosition.sub(globalBoxPosition);
+        var d = vectorBetweenObjects.length();
+        //console.log(d);
+        if (d < 20) {
+            particlesHolder.spawnParticles(this.saloon.box.position.clone(), 15, Colors.red, 3);
+            this.remove(this.saloon.box);
+        }
     }
 
     updateCar(targetX, targetY) {
@@ -96,6 +108,10 @@ class Room extends THREE.Scene {
     turnOnLights() {
         this.spotLight.intensity = this.ambientLight.intensity = 1;
     }
+
+
+
+
     
 
     /// It returns the camera
