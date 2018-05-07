@@ -14,10 +14,19 @@ class Room extends THREE.Scene {
         this.add(this.car);
         this.createLights();
         this.createCamera(renderer);
+        //this.prueba = this.createPrueba();
+        //this.add(this.prueba);
+        this.axis = new THREE.AxisHelper (35);
+        this.add (this.axis);
 
         this.fog = new THREE.Fog(new THREE.Color( 0xF5DA81 ), 300, 1000);
         //this.add(this.fog);
       }
+
+    setVelocity(vel) {
+        this.velocity = vel;
+        this.saloon.velocity = vel;
+    }
 
     createCamera (renderer) {
         this.camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -35,6 +44,19 @@ class Room extends THREE.Scene {
         this.trackballControls.panSpeed = 0.5;
         //this.trackballControls.target = look;
 
+    }
+
+    createPrueba() {
+        var prueba = new THREE.Mesh(
+            new THREE.BoxGeometry(10, 10, 10),
+            new THREE.MeshPhongMaterial({color:Colors.pink, shading:THREE.FlatShading})
+        )
+        prueba.name = "cajita";
+
+        prueba.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 5, 0));
+        prueba.position.x = 20;
+
+        return prueba;
     }
 
     createLights() {
@@ -74,19 +96,38 @@ class Room extends THREE.Scene {
         } else {
             this.spotLight.position.z = 500;
         }
+
+        /*
+        if (this.prueba.position.z > -100) {
+            this.prueba.position.z = this.prueba.position.z - this.velocity;
+        } else {
+            this.prueba.position.z = 200;
+        }
         var globalBoxPosition = this.saloon.getPosBox();
         var vectorBetweenObjects = new THREE.Vector2();
+        /*
         vectorBetweenObjects.subVectors(new THREE.Vector2 (this.saloon.getPosBox().x, this.saloon.getPosBox().z),
                                         new THREE.Vector2 (this.car.getPos().x, this.car.getPos().z));
-        
+        */
+        /*
+        var disX = Math.abs(this.prueba.position.x - this.car.getPos().x);
+        var disZ = Math.abs(this.prueba.position.z - this.car.getPos().z);
+        */
+       /*
         //var diffPos = globalCarPosition.sub(globalBoxPosition);
-        var d = vectorBetweenObjects.length();
-        //console.log(d);
-        if (d < 20) {
-            particlesHolder.spawnParticles(this.saloon.box.position.clone(), 15, Colors.red, 3);
-            this.remove(this.saloon.box);
+        var d = vectorBetweenObjects.length;
+        //console.log(disX);
+        if (disX < 10 && disZ < 20) {
+            particlesHolder.spawnParticles(this.prueba.position, 15, Colors.red, 3);
+            this.remove(this.prueba);
+            var object = this.getObjectByName(this.prueba.name);
+            this.remove(object);
+            this.prueba.visible = false;
         }
+        */
     }
+
+
 
     updateCar(targetX, targetY) {
         // X - IZQ / DER

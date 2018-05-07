@@ -157,16 +157,26 @@ function normalize(v, vmin, vmax, tmin, tmax) {
   var dt = tmax - tmin;
   var tv = tmin + (pc * dt);
   return tv;
+} 
+
+function updateLife() {
+  document.getElementById("level_progress").style.width = level.life + "%";
+  document.getElementById("level_progress").style.backgroundColor = "red";
+  document.getElementById("level_progress").style.backgroundColor = "rgb(240, 158, 51)";
 }
 
 /// It renders every frame
 function render() {
   if (!pause) {
     room.update();
+    loop();
+    updateLife();
     updateCar();
     stats.update();
     room.getCameraControls().update ();
     //room.animate(GUIcontrols);
+    boxesHolder.update(room.car.getPos());
+    
   }
   requestAnimationFrame(render);
   renderer.render(room, room.getCamera());
@@ -189,6 +199,8 @@ $(function () {
   // create a room, that will hold all our elements such as objects, cameras and lights.
   room = new Room (renderer.domElement);
   createParticles();
+  createBoxes();
+  setLevel(1);
  
   createGUI(true);
 

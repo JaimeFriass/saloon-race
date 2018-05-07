@@ -111,32 +111,32 @@ class Car extends THREE.Object3D {
     createBody() {
         var body = new THREE.Mesh (
             new THREE.BoxGeometry(13, 3, this.ancho),
-            new THREE.MeshPhongMaterial({color:Colors.red, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
         body.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0,3,0));
 
         var body2 = new THREE.Mesh (
             new THREE.BoxGeometry(0.5, 3, this.ancho),
-            new THREE.MeshPhongMaterial({color:Colors.red, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
         body2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-3.6,5,0));
 
         var body3 = new THREE.Mesh (
             new THREE.BoxGeometry(0.5, 2.6, this.ancho),
-            new THREE.MeshPhongMaterial({color:Colors.pink, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         body3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-3.8,5,0));
 
 
         var cristales = new THREE.Mesh (
             new THREE.BoxGeometry(6, 2.7, this.ancho),
-            new THREE.MeshPhongMaterial({color:Colors.red, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
         cristales.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-0.4,5.6,0));
        
         var cristales2 = new THREE.Mesh (
             new THREE.BoxGeometry(0.3, 2.2, this.ancho-0.5),
-            new THREE.MeshPhongMaterial({color:Colors.blue, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.blue, flatShading: true})
         )
         cristales2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(2.7,5.6,0));
         
@@ -151,7 +151,7 @@ class Car extends THREE.Object3D {
     createTire() {
         var rueda = new THREE.Mesh (
             new THREE.CylinderGeometry (1.6, 1.5, 2, 20, 1),
-            new THREE.MeshPhongMaterial({color:Colors.brown, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
         )
         rueda.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
         rueda.castShadow = true;

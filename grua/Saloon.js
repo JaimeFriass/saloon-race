@@ -19,36 +19,37 @@ class Saloon extends THREE.Object3D {
         this.createGround();
         this.createWalls();
         this.createCarpets();
-        this.createBox();
+        this.box = this.createBox();
         this.createTable();
+        this.add(this.box);
     }
 
     createWalls() {
         var wall1 = new THREE.Mesh(
             new THREE.BoxGeometry(400, 300, 1),
-            new THREE.MeshPhongMaterial({color:Colors.pink, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
-        wall1.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150,200));
+        wall1.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, 150));
         //this.add(wall1);
 
         var wall2 = new THREE.Mesh(
             new THREE.BoxGeometry(400, 300, 1),
-            new THREE.MeshPhongMaterial({color:Colors.pink, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
-        wall2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, -200));
+        wall2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, -150));
         //this.add(wall2);
         var wall3 = new THREE.Mesh(
             new THREE.BoxGeometry(1, 300, 600),
-            new THREE.MeshPhongMaterial({color:Colors.pink, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
-        wall3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-200, 150,0));
+        wall3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-130, 150,0));
         this.add(wall3);
         
         var wall4 = new THREE.Mesh(
             new THREE.BoxGeometry(1, 300, 600),
             new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
-        wall4.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(200, 150,0));
+        wall4.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(130, 150,0));
         this.add(wall4);
     }
 
@@ -68,19 +69,23 @@ class Saloon extends THREE.Object3D {
     }
 
     createBox() {
-        this.box = new THREE.Mesh (
+        var box = new THREE.Mesh (
             new THREE.BoxGeometry(20, 20, 20),
             new THREE.MeshPhongMaterial({color:Colors.brownDark, flatShading: true})
         )
-        this.box.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-100, 10, -200));
+        box.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-100, 10, -200));
 
-        this.add(this.box);
+        return box;
     }
 
     getPosBox() {
         var globalBoxPosition = new THREE.Vector3();
         globalBoxPosition.setFromMatrixPosition(this.box.matrixWorld);
         return globalBoxPosition;
+    }
+
+    getPosition() {
+        return this.box.position;
     }
 
     updateGround() {
