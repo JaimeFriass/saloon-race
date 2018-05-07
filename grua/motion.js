@@ -16,7 +16,7 @@ function loop() {
 
     if (level.distance > 1000) {
         setLevel(level.current + 1);
-    }
+    } 
 }
 
 function setLevel(num) {
