@@ -21,7 +21,7 @@ class Saloon extends THREE.Object3D {
         this.createCarpets();
         this.box = this.createBox();
         this.createTable();
-        this.add(this.box);
+        //this.add(this.box);
     }
 
     createWalls() {
@@ -111,7 +111,6 @@ class Saloon extends THREE.Object3D {
             this.box.position.z = 440;
             this.box.position.x = 100 - Math.floor((Math.random() * 200));
         }
-
 
         // Table
         if (this.table.position.z > -400) {

@@ -17,6 +17,7 @@ class Room extends THREE.Scene {
         //this.prueba = this.createPrueba();
         //this.add(this.prueba);
         this.axis = new THREE.AxisHelper (35);
+        this.axis.visible = false;
         this.add (this.axis);
 
         this.fog = new THREE.Fog(new THREE.Color( 0xF5DA81 ), 300, 1000);
@@ -91,10 +92,10 @@ class Room extends THREE.Scene {
         }
 
         this.saloon.updateGround();
-        if (this.spotLight.position.z > -500) {
+        if (this.spotLight.position.z > -600) {
             this.spotLight.position.z = this.spotLight.position.z - this.velocity;
         } else {
-            this.spotLight.position.z = 500;
+            this.spotLight.position.z = 600;
         }
 
         /*

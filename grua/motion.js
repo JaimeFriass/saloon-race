@@ -30,6 +30,7 @@ function setLevel(num) {
                 life: 100,
                 boxLastSpawn: 0,
                 distanceForBoxSpawn: 70,
+                lights: true,
             };
             room.setVelocity(1.5);
             document.getElementById("level_id").innerHTML = "Level 1";
@@ -43,11 +44,33 @@ function setLevel(num) {
                 life: 100,
                 boxLastSpawn: 0,
                 distanceForBoxSpawn: 40,
+                ligths: true,
             };
             room.setVelocity(3);
             document.getElementById("level_id").innerHTML = "Level 2";
             break;
+        case 3:
+            level = {
+                current: 3,
+                velocity: 4,
+                acceleration: 1.0001,
+                distance: 0,
+                life: 100,
+                boxLastSpawn: 0,
+                distanceForBoxSpawn: 30,
+                lights: false,
+            }
+            room.setVelocity(level.velocity);
+            document.getElementById("level_id").innerHTML = "Level 3";
+            document.getElementById("level_id").style.color = "white";
+            break;
             
+    }
+
+    if (!level.lights) {
+        room.turnOffLights();
+    } else {
+        room.turnOnLights();
     }
 }
 
