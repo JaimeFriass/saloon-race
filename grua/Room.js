@@ -50,7 +50,7 @@ class Room extends THREE.Scene {
     createPrueba() {
         var prueba = new THREE.Mesh(
             new THREE.BoxGeometry(10, 10, 10),
-            new THREE.MeshPhongMaterial({color:Colors.pink, shading:THREE.FlatShading})
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading:true})
         )
         prueba.name = "cajita";
 
@@ -74,6 +74,7 @@ class Room extends THREE.Scene {
         // the shadow resolution
         this.spotLight.shadow.mapSize.width=2048
         this.spotLight.shadow.mapSize.height=2048;
+        this.spotLight.intensity = 0.5;
         this.add (this.spotLight);
     }
 

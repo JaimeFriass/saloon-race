@@ -7,16 +7,30 @@ var Colors = {
 	blue:0x68c3c0,
 };
 
+var GroundTextures = [
+    "imgs/wood.jpg",
+    "imgs/kitchen.jpg",
+    "imgs/wood.jpg",
+    "imgs/wood.jpg",
+]
+
 class Saloon extends THREE.Object3D {
     constructor() {
         super();
         this.walls = null;
         this.ground = null;
         this.carpet = null;
+        this.midWall = null;
         this.table = new THREE.Object3D();
         this.box = null;
         this.velocity = 1;
-        this.createGround();
+        this.ground1 = this.createGround(GroundTextures[0]);
+        this.ground2 = this.createGround(GroundTextures[0]);
+        this.ground2.position.z = 795;
+        this.add(this.ground1);
+        this.add(this.ground2);
+        this.currentLevel1 = 0;
+        this.currentLevel2 = 0;
         this.createWalls();
         this.createCarpets();
         this.box = this.createBox();
@@ -53,19 +67,18 @@ class Saloon extends THREE.Object3D {
         this.add(wall4);
     }
 
-    createGround() {
-        var wood = new THREE.TextureLoader().load("imgs/wood.jpg");
+    createGround(texture) {
+        var wood = new THREE.TextureLoader().load(texture);
         wood.wrapS = THREE.RepeatWrapping;
         wood.wrapT = THREE.RepeatWrapping;
         wood.repeat.set( 8, 8 );
-        this.ground = new THREE.Mesh (
+        var ground = new THREE.Mesh (
           new THREE.BoxGeometry (400, 0.2, 800, 1, 1, 1),
           new THREE.MeshPhongMaterial ({map: wood}));
-        this.ground.applyMatrix (new THREE.Matrix4().makeTranslation (0,-0.1,0));
-        this.ground.receiveShadow = true;
-        this.ground.autoUpdateMatrix = false;
-
-        this.add (this.ground);
+        ground.applyMatrix (new THREE.Matrix4().makeTranslation (0,-0.1,0));
+        ground.receiveShadow = true;
+        ground.autoUpdateMatrix = false;
+        return ground;
     }
 
     createBox() {
@@ -90,18 +103,42 @@ class Saloon extends THREE.Object3D {
 
     updateGround() {
         // Ground
-        if (this.ground.position.z > -200) {
-            this.ground.position.z = this.ground.position.z - this.velocity;
+        if (this.ground1.position.z > -800) {
+            this.ground1.position.z = this.ground1.position.z - this.velocity;
         } else {
-            this.ground.position.z = 100;
+            
+            if (level.current != this.currentLevel1 ) {
+                console.log("GROUND 1 = level.current: " + level.current + " currentLevel: " + this.currentLevel1);
+                this.nextChunk(1);
+            } else {
+                this.ground1.position.z = 600;
+            }
+        }
+        if (this.ground2.position.z > -800) {
+            this.ground2.position.z = this.ground2.position.z - this.velocity;
+        } else {
+            console.log("GROUND 2 = level.current: " + level.current + " currentLevel: " + this.currentLevel2);
+            if (level.current != this.currentLevel2) {
+                
+                this.nextChunk(2);
+            } else {
+                this.ground2.position.z = 600;
+            }
+        }
+        if (this.midWall != null) {
+            if (this.midWall.position.z > -2000) {
+                this.midWall.position.z = this.midWall.position.z - this.velocity;
+            } else {
+                this.remove(this.midWall);
+            }
         }
 
         // Carpet
-        if (this.ground.position.z > -400) {
+        if (this.carpet.position.z > -400) {
             this.carpet.position.z = this.carpet.position.z - this.velocity;
         } else {
             this.carpet.position.z = 400;
-            this.carpet.position.x = 100 - Math.floor((Math.random() * 100));
+            this.carpet.position.x = 70 - Math.floor((Math.random() * 70));
         }
 
         // Boxes
@@ -118,6 +155,41 @@ class Saloon extends THREE.Object3D {
         } else {
             this.table.position.z = 440;
             this.table.position.x = 100 - Math.floor((Math.random() * 200));
+        }
+    }
+
+    createMidWall() {
+        var wall = new THREE.Mesh(
+            new THREE.BoxGeometry(400, 300, 1),
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
+        )
+        wall.position.y = 150;
+        return wall;
+    }
+
+    nextChunk(number) {
+        console.log("NEXT CHUNK: " + number);
+        if (number == 1) {
+            this.remove(this.ground1);
+            this.ground1 = this.createGround(GroundTextures[level.current]);
+            this.currentLevel1++;
+            this.add(this.ground1);
+            this.ground1.position.z = 800;
+
+            this.midWall = this.createMidWall();
+            this.midWall.position.z = 400;
+            this.add(this.midWall);
+            
+        }
+        else if (number == 2) {
+            this.remove(this.ground2);
+            this.ground2 = this.createGround(GroundTextures[level.current]);
+            this.currentLevel2++;
+            this.add(this.ground2);
+            this.ground2.position.z = 800;
+            this.midWall = this.createMidWall();
+            this.midWall.position.z = 400;
+            this.add(this.midWall);
         }
     }
 

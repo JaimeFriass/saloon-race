@@ -1,0 +1,171 @@
+body{
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Amatic SC', bold;
+    z-index: 1;
+    text-align: center;
+}
+
+#game {
+    z-index: 1;
+    display: block;
+    filter: blur(5px); 
+    transition: 1s -webkit-filter linear;
+}
+
+#level_bar {
+    position: absolute;
+    top: 20px; left: 200px;
+    width: 35%;
+    height: 12px;
+    background-color: rgb(240, 191, 128);
+    border: solid rgb(143, 76, 0) 1px;
+    border-radius: 4px;
+    padding: 2px 2px 2px 2px;
+}
+
+#level_progress {
+    width: 100%;
+    height: 10px;
+    background-color: rgb(240, 158, 51);
+    border-radius: 2px;
+    transition: 0.5s ease-in;
+}
+
+#level_id {
+    position: absolute;
+    top: 5px; left: 100px;
+    font-size: 30pt;
+    font-style: bold;
+    color: black;
+    text-shadow: black 2px 2px 2px;
+}
+
+div.menu {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 1000px;
+    overflow: hidden;
+    padding-top: 250px;
+    z-index: 99;
+}
+
+img.logo {
+    margin-bottom: -90px;
+}
+
+.se-slope{
+    margin: 0 -50px;
+    transform-origin: left center;
+}
+.se-slope:nth-child(odd){
+    background: rgba(255, 170, 58, 0.842);
+    transform: rotate(5deg);
+    margin-top: -200px;
+    box-shadow: 0px -1px 3px rgba(0,0,0,0.4);
+}
+.se-slope:nth-child(even){
+    background: #ec742f;
+    transform: rotate(-5deg);
+    box-shadow: 0px 2px 3px rgba(0,0,0,0.4) inset;
+}
+
+.se-content {
+    margin: 0 auto;
+}
+
+.se-slope:nth-child(odd) .se-content{
+    transform: rotate(-5deg);
+    color: #e28800; 
+    padding: 50px 100px 100px 100px;
+}
+.se-slope:nth-child(even) .se-content{
+    transform: rotate(5deg);
+    color: #e28800;
+    padding: 150px 100px 250px 100px;
+}
+    
+div.menu h2 {
+    font-size: 35pt;
+    color: rgb(150, 89, 10);
+}
+
+.se-content a.button, a.btn {
+    font-size: 30pt;
+    height: 30px;
+    background-color:rgb(255, 221, 128);
+    cursor: pointer;
+    color: black; 
+    box-shadow: black 1px 1px;
+    transition: 0.3s;
+    border-radius: 3px;
+    font-style: bold;   
+    margin: 20px 20px 20px 20px;     
+    padding: 15px 15px 15px 15px;
+}
+
+.se-content a.button:hover {
+    background-color:rgb(255, 244, 214);
+}
+
+#settings {
+    display: none;
+}
+
+#settings a.button {
+    padding: 20px 20px 20px 20px;
+}
+
+#distance {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    color: black;
+    font-size: 20pt;
+}
+
+/*      START        */
+
+#start {
+    display: none;
+    z-index: 10;
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    text-align: center;
+}
+
+#start a.btn {
+    padding-left: 50px;
+    padding-right: 50px;
+    background-color: rgb(255, 231, 196);
+    transition: 0.1s;
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+#start a.btn:hover {
+    background-color: white;
+}
+
+#text {
+    color: rgb(150, 89, 10);
+    text-align: center;
+    display: none;
+    z-index: 99;
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    font-size: 120pt;
+    font-style: bold;
+    text-shadow: rgb(82, 82, 82) 3px 3px 5px;
+}
+
+#text p {
+    font-size: 40pt;
+    margin-top: -20px;
+}

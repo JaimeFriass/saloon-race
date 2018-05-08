@@ -14,64 +14,12 @@ function loop() {
     level.velocity = level.velocity * level.acceleration;
     room.setVelocity(level.velocity);
 
-    if (level.distance > 1000) {
+    // For each 1000 cms change level
+    if (level.distance > 1000 && level.current > 0) {
         setLevel(level.current + 1);
-    } 
-}
-
-function setLevel(num) {
-    switch (num) {
-        case 1:
-            level = {
-                current: 1,
-                velocity: 1.5,
-                acceleration: 1.0001,
-                distance: 0,
-                life: 100,
-                boxLastSpawn: 0,
-                distanceForBoxSpawn: 70,
-                lights: true,
-            };
-            room.setVelocity(1.5);
-            document.getElementById("level_id").innerHTML = "Level 1";
-            break;
-        case 2:
-            level = {
-                current: 2,
-                velocity: 3,
-                acceleration: 1.0001,
-                distance: 0,
-                life: 100,
-                boxLastSpawn: 0,
-                distanceForBoxSpawn: 40,
-                ligths: true,
-            };
-            room.setVelocity(3);
-            document.getElementById("level_id").innerHTML = "Level 2";
-            break;
-        case 3:
-            level = {
-                current: 3,
-                velocity: 4,
-                acceleration: 1.0001,
-                distance: 0,
-                life: 100,
-                boxLastSpawn: 0,
-                distanceForBoxSpawn: 30,
-                lights: false,
-            }
-            room.setVelocity(level.velocity);
-            document.getElementById("level_id").innerHTML = "Level 3";
-            document.getElementById("level_id").style.color = "white";
-            break;
-            
     }
 
-    if (!level.lights) {
-        room.turnOffLights();
-    } else {
-        room.turnOnLights();
-    }
+    document.getElementById("distance").innerHTML = level.distance + " cms";
 }
 
 Particle = function () {
@@ -170,9 +118,8 @@ BoxesHolder = function () {
 }
 
 BoxesHolder.prototype.spawnBoxes = function () {
-    var nBoxes = 1;
 
-    for (var i = 0; i < nBoxes; i++) {
+    for (var i = 0; i < level.nBoxes; i++) {
         var box;
         if (boxesHolder.length)
             box = BoxesPool.pop();
@@ -197,9 +144,9 @@ BoxesHolder.prototype.update = function (car_position) {
 
         //var diffPos = car_position.sub(box.mesh.position.clone());
         var difX = Math.abs(car_position.x - box.mesh.position.x);
-        var difY = Math.abs(car_position.z - box.mesh.position.z);
+        var difZ = Math.abs(car_position.z - box.mesh.position.z);
         //console.log(d);
-        if (difX < 15 && difY < 15) {
+        if (difX < 13 && difZ < 15) {
             //console.log("COLISIONA!!");
             particlesHolder.spawnParticles(box.mesh.position.clone(), 15, box.color, 3);
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
@@ -219,7 +166,7 @@ function collition() {
         level.life = level.life - 15;
     } else {
         die();
-        setLevel(1);
+        setLevel(-1);
     }
 }
 

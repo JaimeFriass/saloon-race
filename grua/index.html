@@ -5,8 +5,9 @@
 <head>
     <title>Saloon Race</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="../libs/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
     <script type="text/javascript" src="../libs/MTLLoader.js"></script>
@@ -17,146 +18,10 @@
     <script type="text/javascript" src="Car.js"></script>    
     <script type="text/javascript" src="Room.js"></script>    
     <script type="text/javascript" src="Saloon.js"></script>
-    <script type="text/javascript" src="motion.js"></script>  
+    <script type="text/javascript" src="motion.js"></script> 
+    <script type="text/javascript" src="levels.js"></script>   
     <script type="text/javascript" src="script.js"></script>  
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700" rel="stylesheet">  
-    <style>
-        body{
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Amatic SC', bold;
-            
-            z-index: 1;
-            text-align: center;
-        }
-
-        #game {
-            z-index: 1;
-            display: block;
-            filter: blur(5px); 
-            transition: 1s -webkit-filter linear;
-        }
-
-        #level_bar {
-            position: absolute;
-            top: 20px; left: 200px;
-            width: 35%;
-            height: 12px;
-            background-color: rgb(240, 191, 128);
-            border: solid rgb(143, 76, 0) 1px;
-            border-radius: 4px;
-            padding: 2px 2px 2px 2px;
-        }
-
-        #level_progress {
-            width: 100%;
-            height: 10px;
-            background-color: rgb(240, 158, 51);
-            border-radius: 2px;
-            transition: 0.5s ease-in;
-        }
-
-        #level_id {
-            position: absolute;
-            top: 5px; left: 100px;
-            font-size: 30pt;
-            font-style: bold;
-            color: black;
-            text-shadow: black 2px 2px 2px;
-        }
-
-        /*
-
-        div.menu {
-            position: absolute;
-            top: 25%;
-            left: 25%;
-            background-color: rgb(240, 158, 51);
-            height: 300px;
-            width: 50%;
-            z-index: 99;
-            border-radius: 5px;
-            filter: none;
-            box-shadow: rgb(80, 57, 8) 4px 4px 10px;
-            display: block;
-            max-width: 400px;
-            transform: rotateZ(3deg);
-            -webkit-transform: rotateZ(3deg);
-            -moz-transform: rotateZ(3deg);
-        }
-        
-        */
-
-        div.menu {
-            display: block;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 1000px;
-            overflow: hidden;
-            padding-top: 250px;
-            z-index: 99;
-        }
-
-        img.logo {
-            margin-bottom: -100px;
-        }
-
-        .se-slope{
-            margin: 0 -50px;
-            transform-origin: left center;
-        }
-        .se-slope:nth-child(odd){
-            background: rgba(255, 170, 58, 0.842);
-            transform: rotate(5deg);
-            margin-top: -200px;
-            box-shadow: 0px -1px 3px rgba(0,0,0,0.4);
-        }
-        .se-slope:nth-child(even){
-            background: #ec742f;
-            transform: rotate(-5deg);
-            box-shadow: 0px 2px 3px rgba(0,0,0,0.4) inset;
-        }
-
-        .se-content {
-            margin: 0 auto;
-        }
-
-        .se-slope:nth-child(odd) .se-content{
-            transform: rotate(-5deg);
-            color: #e28800; 
-            padding: 130px 100px 250px 100px;
-        }
-        .se-slope:nth-child(even) .se-content{
-            transform: rotate(5deg);
-            color: #e28800;
-            padding: 150px 100px 250px 100px;
-        }
-            
-        div.menu h2 {
-            font-size: 50pt;
-            color: rgb(150, 89, 10);
-        }
-
-        .se-content a.button {
-            font-size: 25pt;
-            height: 30px;
-            background-color:rgb(255, 221, 128);
-            cursor: pointer;
-            color: black; 
-            box-shadow: black 1px 1px;
-            transition: 0.3s;
-            border-radius: 3px;
-            font-style: bold;   
-            margin: 20px 20px 20px 20px;     
-            padding: 15px 15px 15px 15px;
-        }
-        
-        .button:hover {
-            background-color:rgb(255, 244, 214);
-        }
-    </style>
 </head>
 <body>
     <div id="game">
@@ -181,14 +46,35 @@
     <div id="pause" class="menu">
         <div class="se-slope">
             <div class="se-content">
-                <img class="logo" src="imgs/logo_color.png" height="220" width="400">
+                <img class="logo" src="imgs/logo_black.png" height="220" width="400">
                 <h2>Pause</h2><br>
                 <a class="button" onClick="selectLevel()">CHOOSE LEVEL</a>
-                <a class="button" onClick="hidePause()">SETTINGS</a>
-                <a class="button" onClick="hidePause()">EXIT</a>
+                <a class="button" onClick="settings()">SETTINGS</a>
+                <a style="background-color: rgb(214, 165, 30)" class="button" onClick="hidePause()">CLOSE</a>
             </div>
         </div>
     </div>
+
+    <div id="settings" class="menu">
+        <div class="se-slope">
+            <div class="se-content">
+                <a id="st-lights" class="button">Lights: </a>
+                <a id="st-velocity" onclick="increaseVelocity()" class="button">Velocity: </a>><br><br><br><br>
+                <a class="button" onClick="hideSettings()">BACK</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="start">
+        <img class="start_logo" src="imgs/logo_color.png" height="400" width="700">
+        <br><a class="btn" onclick="hideStart()">Start</a>
+    </div>
+
+    <div id="text">
+        Prueba
+    </div>
+
+    <div id="distance">0</div>
 </body>
 
 </html>

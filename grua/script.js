@@ -24,28 +24,6 @@ pause = false;
  * @param withStats - A boolean to show the statictics or not
  */
 function createGUI (withStats) {
-  GUIcontrols = new function() {
-    this.axis = true;
-    this.lightIntensity = 0.5;
-    this.rotation = 6;
-    this.distance = 10;
-    this.height   = 10;
-    this.addBox   = function () {
-      setMessage ("Añadir cajas clicando en el suelo");
-      applicationMode = Theroom.ADDING_BOXES;
-    };
-    this.moveBox  = function () {
-      setMessage ("Mover y rotar cajas clicando en ellas");
-      applicationMode = Theroom.MOVING_BOXES;
-    };
-    this.takeBox  = false;
-  }
-  
-  var gui = new dat.GUI();
-  var axisLights = gui.addFolder ('Axis and Lights');
-    axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
-    axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :');
-  
   if (withStats)
     stats = initStats();
 }
@@ -98,11 +76,9 @@ function onKeyDown(event) {
       if (!pause) {
         showPause();
         pause = true;
-        console.log("Pausando");
       } else if (pause) {
         hidePause();
         pause = false;
-        console.log("Despausando");
       }
       break;
   }
@@ -147,10 +123,16 @@ function createRenderer () {
 }
 
 function updateCar() {
-  var targetX = normalize(mousePos.x, -1, 1, -100, 100);
-  var targetY = normalize(mousePos.y, -1, 1, 25, 175);
+  if (level.current != -1) {
+    var targetX = normalize(mousePos.x, -1, 1, -100, 100);
+    var targetY = normalize(mousePos.y, -1, 1, 25, 175);
 
-  room.updateCar(targetX, targetY);
+    room.updateCar(targetX, targetY);
+  } else {
+    //console.log("POS X: " + room.car.getPos().x + " POS Z: " + room.car.getPos().z);
+    room.car.position.y = room.car.position.y + 0.5;
+    room.car.position.z = room.car.position.z - 1;
+  }
 }
 
 function normalize(v, vmin, vmax, tmin, tmax) {
@@ -170,14 +152,53 @@ function updateLife() {
 
 function showPause() {
   document.getElementById("game").style.filter = "blur(5px)";
-  document.getElementById("pause").style.display = "block";
+  //document.getElementById("pause").style.display = "block";
+  $("#pause").fadeIn(500);
   
 }
 
 function hidePause() {
   document.getElementById("game").style.filter = "none";
-  document.getElementById("pause").style.display = "none";
-  console.log("HIDE PAUSE()");
+  //document.getElementById("pause").style.display = "none";
+  $("#pause").fadeOut(500);
+  pause = false;
+}
+
+function settings() {
+  //document.getElementById("pause").style.display = "none";
+  $("#pause").fadeOut(500);
+  //document.getElementById("settings").style.display = "block";
+  $("#settings").fadeIn(500);
+  document.getElementById("st-lights").innerHTML = "Lights: " + level.lights;
+  document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
+}
+
+function hideSettings() {
+  //document.getElementById("settings").style.display = "none";
+  $("#settings").fadeOut(500);
+  //document.getElementById("pause").style.display = "block";
+  $("#pause").fadeIn(500);
+
+}
+
+function showStart() {
+  document.getElementById("start").style.display = "block";
+}
+
+function hideStart() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("game").style.filter = "none";
+  setLevel(1);
+}
+
+function increaseVelocity() {
+  level.velocity = (level.velocity + 1)%8;
+  document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
+}
+
+function showText(title, subtitle) { 
+  $("#text").html(title + "<p>" + subtitle + "</p>");
+  $("#text").fadeIn(2000).fadeOut(2500);
 }
 
 /// It renders every frame
@@ -187,7 +208,7 @@ function render() {
     loop();
     updateLife();
     updateCar();
-    stats.update();
+    //stats.update();
     room.getCameraControls().update ();
     //room.animate(GUIcontrols);
     boxesHolder.update(room.car.getPos());
@@ -215,9 +236,10 @@ $(function () {
   room = new Room (renderer.domElement);
   createParticles();
   createBoxes();
-  setLevel(1);
- 
-  createGUI(true);
+
+  setLevel(0);
+  $("#start").fadeIn(3500);
+  createGUI(false);
 
   render();
 });
