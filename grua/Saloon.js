@@ -9,6 +9,7 @@ var Colors = {
 
 var GroundTextures = [
     "imgs/wood.jpg",
+    "imgs/wood2.jpg",
     "imgs/kitchen.jpg",
     "imgs/wood.jpg",
     "imgs/wood.jpg",
@@ -40,27 +41,27 @@ class Saloon extends THREE.Object3D {
 
     createWalls() {
         var wall1 = new THREE.Mesh(
-            new THREE.BoxGeometry(400, 300, 1),
+            new THREE.BoxGeometry(500, 300, 1),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         wall1.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, 150));
         //this.add(wall1);
 
         var wall2 = new THREE.Mesh(
-            new THREE.BoxGeometry(400, 300, 1),
+            new THREE.BoxGeometry(500, 300, 1),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         wall2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, -150));
         //this.add(wall2);
         var wall3 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 300, 600),
+            new THREE.BoxGeometry(1, 300, 700),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         wall3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-130, 150,0));
         this.add(wall3);
         
         var wall4 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 300, 600),
+            new THREE.BoxGeometry(1, 300, 700),
             new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
         wall4.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(130, 150,0));
@@ -103,7 +104,7 @@ class Saloon extends THREE.Object3D {
 
     updateGround() {
         // Ground
-        if (this.ground1.position.z > -800) {
+        if (this.ground1.position.z > -793) {
             this.ground1.position.z = this.ground1.position.z - this.velocity;
         } else {
             
@@ -111,10 +112,10 @@ class Saloon extends THREE.Object3D {
                 console.log("GROUND 1 = level.current: " + level.current + " currentLevel: " + this.currentLevel1);
                 this.nextChunk(1);
             } else {
-                this.ground1.position.z = 600;
+                this.ground1.position.z = 550;
             }
         }
-        if (this.ground2.position.z > -800) {
+        if (this.ground2.position.z > -793) {
             this.ground2.position.z = this.ground2.position.z - this.velocity;
         } else {
             console.log("GROUND 2 = level.current: " + level.current + " currentLevel: " + this.currentLevel2);
@@ -122,22 +123,25 @@ class Saloon extends THREE.Object3D {
                 
                 this.nextChunk(2);
             } else {
-                this.ground2.position.z = 600;
+                this.ground2.position.z = 550;
             }
         }
+
         if (this.midWall != null) {
             if (this.midWall.position.z > -2000) {
                 this.midWall.position.z = this.midWall.position.z - this.velocity;
             } else {
+                this.midWall.position.z = -3000;
                 this.remove(this.midWall);
+                this.midWall.position.z = -3000;
             }
         }
 
         // Carpet
-        if (this.carpet.position.z > -400) {
+        if (this.carpet.position.z > -1000) {
             this.carpet.position.z = this.carpet.position.z - this.velocity;
         } else {
-            this.carpet.position.z = 400;
+            this.carpet.position.z = 1000;
             this.carpet.position.x = 70 - Math.floor((Math.random() * 70));
         }
 
@@ -150,21 +154,29 @@ class Saloon extends THREE.Object3D {
         }
 
         // Table
-        if (this.table.position.z > -400) {
+        if (this.table.position.z > -700) {
             this.table.position.z = this.table.position.z - this.velocity;
         } else {
-            this.table.position.z = 440;
-            this.table.position.x = 100 - Math.floor((Math.random() * 200));
+            this.table.position.z = 700;
+            this.table.position.x = 50 - Math.floor((Math.random() * 100));
         }
     }
 
     createMidWall() {
-        var wall = new THREE.Mesh(
-            new THREE.BoxGeometry(400, 300, 1),
+        var wall1 = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 300, 3),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
-        wall.position.y = 150;
-        return wall;
+
+        wall1.applyMatrix (new THREE.Matrix4().makeTranslation (-120, 150, 0));
+        var wall2 = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 300, 3),
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
+        )
+        wall2.applyMatrix (new THREE.Matrix4().makeTranslation (240, 0, 0));
+
+        wall1.add(wall2);
+        return wall1;
     }
 
     nextChunk(number) {
@@ -176,6 +188,7 @@ class Saloon extends THREE.Object3D {
             this.add(this.ground1);
             this.ground1.position.z = 800;
 
+            this.remove(this.midWall);
             this.midWall = this.createMidWall();
             this.midWall.position.z = 400;
             this.add(this.midWall);
@@ -187,6 +200,7 @@ class Saloon extends THREE.Object3D {
             this.currentLevel2++;
             this.add(this.ground2);
             this.ground2.position.z = 800;
+            this.remove(this.midWall);
             this.midWall = this.createMidWall();
             this.midWall.position.z = 400;
             this.add(this.midWall);

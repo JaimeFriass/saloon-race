@@ -18,6 +18,7 @@ function setLevel(num) {
             }
             showText("You died", "little piece of shit");
             document.getElementById("level_id").innerHTML = "Dead";
+            showRestart();
             break;
         case 0:
             
@@ -84,7 +85,7 @@ function setLevel(num) {
             break;
         case 4:
             level = {
-                current: 3,
+                current: 4,
                 velocity: 10,
                 acceleration: 1.0001,
                 nBoxes: 1,

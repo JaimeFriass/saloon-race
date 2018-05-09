@@ -19,6 +19,9 @@ mousePos = {x:0, y:0};
 // A boolean to know if the game is on pause
 pause = false;
 
+click_sound = null;
+text_sound = null;
+
 /// It creates the GUI and, optionally, adds statistic information
 /**
  * @param withStats - A boolean to show the statictics or not
@@ -162,6 +165,7 @@ function hidePause() {
   //document.getElementById("pause").style.display = "none";
   $("#pause").fadeOut(500);
   pause = false;
+  click_sound.play();
 }
 
 function settings() {
@@ -171,6 +175,7 @@ function settings() {
   $("#settings").fadeIn(500);
   document.getElementById("st-lights").innerHTML = "Lights: " + level.lights;
   document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
+  click_sound.play();
 }
 
 function hideSettings() {
@@ -178,6 +183,7 @@ function hideSettings() {
   $("#settings").fadeOut(500);
   //document.getElementById("pause").style.display = "block";
   $("#pause").fadeIn(500);
+  click_sound.play();
 
 }
 
@@ -189,6 +195,7 @@ function hideStart() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.filter = "none";
   setLevel(1);
+  click_sound.play();
 }
 
 function increaseVelocity() {
@@ -199,6 +206,36 @@ function increaseVelocity() {
 function showText(title, subtitle) { 
   $("#text").html(title + "<p>" + subtitle + "</p>");
   $("#text").fadeIn(2000).fadeOut(2500);
+  text_sound.play();
+}
+
+function showRestart() {
+  $("#restart").fadeIn(700);
+}
+
+function restart() {
+  $("#restart").fadeOut(700);
+  setLevel(1);
+}
+
+function showChooseLevel() {
+  $("#pause").fadeOut(500);
+  $("#choose_level").fadeIn(500);
+  $("#current_level").html("Current level: " + level.current);
+}
+
+function hideChooseLevel() {
+  $("#choose_level").fadeOut(500);
+  $("#pause").fadeIn(500);
+  click_sound.play();
+}
+
+function settingLevel(number) {
+  $("#choose_level").fadeOut(500);
+  document.getElementById("game").style.filter = "none";
+  setLevel(number);
+  click_sound.play();
+  pause = false;
 }
 
 /// It renders every frame
@@ -234,6 +271,8 @@ $(function () {
   
   // create a room, that will hold all our elements such as objects, cameras and lights.
   room = new Room (renderer.domElement);
+  click_sound = document.getElementById("audio_click");
+  text_sound = document.getElementById("audio_text");
   createParticles();
   createBoxes();
 

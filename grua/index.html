@@ -48,7 +48,7 @@
             <div class="se-content">
                 <img class="logo" src="imgs/logo_black.png" height="220" width="400">
                 <h2>Pause</h2><br>
-                <a class="button" onClick="selectLevel()">CHOOSE LEVEL</a>
+                <a class="button" onClick="showChooseLevel()">CHOOSE LEVEL</a>
                 <a class="button" onClick="settings()">SETTINGS</a>
                 <a style="background-color: rgb(214, 165, 30)" class="button" onClick="hidePause()">CLOSE</a>
             </div>
@@ -65,6 +65,25 @@
         </div>
     </div>
 
+    <div id="choose_level" class="menu">
+        <div class="se-slope">
+            <div class="se-content">
+                <h2 id="current_level">Current level: </h2><br>
+                <a class="btn" onclick="settingLevel(1)">Level 1</a>
+                <a class="btn" onclick="settingLevel(2)">Level 2</a>
+                <a class="btn" onclick="settingLevel(3)">Level 3</a>
+                <a class="btn" onclick="settingLevel(4)">Level 4</a>
+                <br><br><br>
+                <a class="btn" onclick="settingLevel(5)">Level 5</a>
+                <a class="btn" onclick="settingLevel(6)">Level 6</a>
+                <a class="btn" onclick="settingLevel(7)">Level 7</a>
+                <a class="btn" onclick="settingLevel(8)">Level 8</a>
+                <br><br><br>
+                <a id="back" class="btn" onclick="hideChooseLevel()">Back</a>
+            </div>
+        </div>
+    </div>
+
     <div id="start">
         <img class="start_logo" src="imgs/logo_color.png" height="400" width="700">
         <br><a class="btn" onclick="hideStart()">Start</a>
@@ -75,6 +94,16 @@
     </div>
 
     <div id="distance">0</div>
+    <audio id="audio_click">
+        <source src="models/click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audio_text">
+        <source src="models/text.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="restart">
+        <a class="btn" onclick="restart()">Try again</a>
+    </div>
 </body>
 
 </html>

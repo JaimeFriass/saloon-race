@@ -20,6 +20,18 @@ class Room extends THREE.Scene {
         this.axis.visible = false;
         this.add (this.axis);
 
+        // Audio in scene
+        var listener = new THREE.AudioListener();
+        this.camera.add(listener);
+        
+        var sound = new THREE.Audio(listener);
+        var audioLoader = new THREE.AudioLoader();
+        audioLoader.load('models/background.ogg', function (buffer) {
+            sound.setBuffer(buffer);
+            sound.setLoop(true);
+            sound.setVolume(0.7);
+            sound.play();
+});
         this.fog = new THREE.Fog(new THREE.Color( 0xF5DA81 ), 300, 1000);
         //this.add(this.fog);
       }
