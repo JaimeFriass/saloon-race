@@ -153,7 +153,7 @@ BoxesHolder.prototype.update = function (car_position) {
             this.mesh.remove(box.mesh);
             collition();
             i--;
-        } else if (box.mesh.position.z < -260) {
+        } else if (box.mesh.position.z < -350) {
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
             this.mesh.remove(box.mesh);
             i--;

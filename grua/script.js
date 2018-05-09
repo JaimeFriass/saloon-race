@@ -238,6 +238,18 @@ function settingLevel(number) {
   pause = false;
 }
 
+function setLights(light) {
+  if (light) {
+    room.turnOnLights();
+    $("#text").css("color", "rgb(150, 89, 10)");
+    $("#level_id").css("color", "rgb(150, 89, 10)");
+  } else {
+    room.turnOffLights();
+    $("#text").css("color", "white");
+    $("#level_id").css("color", "white");
+  }
+}
+
 /// It renders every frame
 function render() {
   if (!pause) {

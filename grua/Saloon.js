@@ -13,6 +13,8 @@ var GroundTextures = [
     "imgs/kitchen.jpg",
     "imgs/wood.jpg",
     "imgs/wood.jpg",
+    "imgs/wood2.jpg",
+    "imgs/wood.jpg",
 ]
 
 class Saloon extends THREE.Object3D {

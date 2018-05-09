@@ -61,7 +61,7 @@ function setLevel(num) {
                 life: 100,
                 boxLastSpawn: 0,
                 distanceForBoxSpawn: 60,
-                ligths: true,
+                lights: true,
             };
             document.getElementById("level_id").innerHTML = "Level 2";
             showText("Level 2", "A bit faster");
@@ -76,31 +76,62 @@ function setLevel(num) {
                 life: 100,
                 boxLastSpawn: 0,
                 distanceForBoxSpawn: 8,
-                lights: false,
+                lights: true,
             }
             document.getElementById("level_id").innerHTML = "Level 3";
             showText("Level 3", "Slowly, but more boxes");
-            //room.turnOffLights();
             document.getElementById("level_id").style.color = "white";
             break;
         case 4:
             level = {
                 current: 4,
-                velocity: 10,
+                velocity: 2,
+                acceleration: 1.0001,
+                nBoxes: 2,
+                distance: 0,
+                life: 100,
+                boxLastSpawn: 0,
+                distanceForBoxSpawn: 20,
+                lights: false,
+            }
+            document.getElementById("level_id").innerHTML = "Level 4";
+            showText("Level 4", "Where are the lights??");
+            break; 
+
+        case 5:
+            level = {
+                current: 5,
+                velocity: 4,
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
-                distanceForBoxSpawn: 100,
-                lights: false,
+                distanceForBoxSpawn: 40,
+                lights: true,
             }
-            document.getElementById("level_id").innerHTML = "Level 4";
-            showText("Level 4", "Fuck u");
-            //room.turnOnLights();
+            document.getElementById("level_id").innerHTML = "Level 5";
+            showText("Level 5", "Harder");
+            break;
+
+        case 5:
+            level = {
+                current: 6,
+                velocity: 6,
+                acceleration: 1.0001,
+                nBoxes: 1,
+                distance: 0,
+                life: 100,
+                boxLastSpawn: 0,
+                distanceForBoxSpawn: 70,
+                lights: true,
+            }
+            document.getElementById("level_id").innerHTML = "Level 6";
+            showText("Level 6", "Fuck u");
             document.getElementById("level_id").style.color = "red";
             break; 
     }
     room.setVelocity(level.velocity);
+    setLights(level.lights);
 
 }
