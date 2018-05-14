@@ -13,6 +13,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 1,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 1000,
                 lights: true,
             }
@@ -30,6 +31,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 1000,
                 lights: true,
             }
@@ -39,13 +41,14 @@ function setLevel(num) {
             room.car.position.y = 0;
             level = {
                 current: 1,
-                velocity: 1.5,
+                velocity: 3,
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
+                life: 200,
                 boxLastSpawn: 0,
-                distanceForBoxSpawn: 70,
+                doorLastSpawn: 0,
+                distanceForBoxSpawn: 2000,
                 lights: true,
             };
             document.getElementById("level_id").innerHTML = "Level 1";
@@ -60,6 +63,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 60,
                 lights: true,
             };
@@ -75,6 +79,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 8,
                 lights: true,
             }
@@ -91,6 +96,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 20,
                 lights: false,
             }
@@ -107,6 +113,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 40,
                 lights: true,
             }
@@ -123,6 +130,7 @@ function setLevel(num) {
                 distance: 0,
                 life: 100,
                 boxLastSpawn: 0,
+                doorLastSpawn: 0,
                 distanceForBoxSpawn: 70,
                 lights: true,
             }

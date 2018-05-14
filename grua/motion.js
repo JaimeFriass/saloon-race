@@ -1,6 +1,7 @@
 var particlesPool = [];
 var particlesInUse = [];
 var boxesPool = [];
+var doorPool = [];
 
 var level;
 
@@ -10,6 +11,12 @@ function loop() {
         level.boxLastSpawn = Math.floor(level.distance);
         boxesHolder.spawnBoxes();
     }
+
+    if (Math.floor(level.distance) % 1000 == 0 && Math.floor(level.distance) > level.doorLastSpawn) {
+        level.doorLastSpawn = Math.floor(level.distance);
+        doorHolder.spawnDoor();
+    }
+
     level.distance++;
     level.velocity = level.velocity * level.acceleration;
     room.setVelocity(level.velocity);
@@ -22,6 +29,10 @@ function loop() {
     document.getElementById("distance").innerHTML = level.distance + " cms";
 }
 
+////////////////////////////////////////////////////////////////////////////////////
+//                        PARTICLE                                                //
+////////////////////////////////////////////////////////////////////////////////////
+
 Particle = function () {
     var geom = new THREE.TetrahedronGeometry(5, 0);
     var mat = new THREE.MeshPhongMaterial({
@@ -33,7 +44,6 @@ Particle = function () {
     this.mesh = new THREE.Mesh(geom, mat);
 }
 
-//function Particle(pos, col, scale) {
 Particle.prototype.explode = function (pos, col, scale) {
     var _this = this;
     var _p = this.mesh.parent;
@@ -88,6 +98,10 @@ function createParticles() {
     room.add(particlesHolder.mesh);
 }
 
+////////////////////////////////////////////////////////////////////////////////////
+//                        BOXES                                                   //
+////////////////////////////////////////////////////////////////////////////////////
+
 var BoxColor = [
     0xf25346,
     0xd8d0d1,
@@ -99,16 +113,26 @@ var BoxColor = [
 
 
 Box = function () {
-    var geom = new THREE.TetrahedronGeometry(8, 2);
+    var random = Math.random()*10;
     var box_color = BoxColor[Math.floor(Math.random()*(BoxColor.length - 1))];
+
+    if (random > 4) {
+        var height = Math.floor( Math.random() * 20);
+        var geom = new THREE.BoxGeometry(13, 10 + height, 8);
+    } else {
+        var geom = new THREE.TetrahedronGeometry(8, 2);
+    }
+
     var mat = new THREE.MeshPhongMaterial({
         color: box_color,
         shininess: 0,
         specular: 0xffffff,
         flatShading: true
     });
+
     this.color = box_color;
     this.mesh = new THREE.Mesh(geom, mat);
+    this.mesh.rotation.y = Math.random()*6 - 3;
     this.mesh.castShadow = true;
 }
 
@@ -161,6 +185,135 @@ BoxesHolder.prototype.update = function (car_position) {
     }
 }
 
+function createBoxes() {
+    for (var i = 0; i < 10; i++) {
+        var box = new Box();
+        boxesPool.push(box);
+    }
+
+    boxesHolder = new BoxesHolder();
+    room.add(boxesHolder.mesh);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+//                                DOORS                                           //
+////////////////////////////////////////////////////////////////////////////////////
+
+Door = function () {
+
+    this.door = new THREE.Mesh (
+        new THREE.BoxGeometry(5, 260, 100),
+        new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
+    )
+
+    this.door.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 260/2, 0));
+
+    var p1 = new THREE.Mesh (
+        new THREE.BoxGeometry(3, 20, 100),
+        new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
+    )
+
+    p1.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(5, 250, 0));
+
+    var p2 = new THREE.Mesh (
+        new THREE.BoxGeometry(3, 20, 100),
+        new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
+    )
+
+    p2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(5, 150, 0));
+
+    var p3 = new THREE.Mesh (
+        new THREE.BoxGeometry(3, 20, 100),
+        new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
+    )
+
+    p3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(5, 5, 0));
+
+    var p4 = new THREE.Mesh (
+        new THREE.BoxGeometry(3, 260, 20),
+        new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
+    )
+
+    p4.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(5, 260/2, 40));
+
+    var p5 = new THREE.Mesh (
+        new THREE.BoxGeometry(3, 260, 20),
+        new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true})
+    )
+
+    p5.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(5, 260/2, -40));
+
+    var manubrio = new THREE.Mesh (
+        new THREE.SphereGeometry(6, 6, 5, 5),
+        new THREE.MeshPhongMaterial({color:Colors.white, flatShading: true})
+    )
+
+    manubrio.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(5, 150, -40));
+
+    this.door.add(p1);
+    this.door.add(p2);
+    this.door.add(p3);
+    this.door.add(p4);
+    this.door.add(p5);
+    this.door.add(manubrio);
+    this.door.castShadow = false;
+}
+
+DoorHolder = function () {
+    this.door = new THREE.Object3D();
+    this.doorsInUse = [];
+}
+
+DoorHolder.prototype.spawnDoor = function () {
+        var door;
+        var rote;
+        if (doorHolder.length)
+            door = DoorPool.pop();
+        else {
+            door = new Door();
+            //console.log("Creando caja");
+        }
+
+        var random = Math.floor( Math.random() * 10 );
+    
+        if (random > 5) {
+            door.door.rotation.y = (Math.PI/180) * 180;
+            door.door.position.x = 131.5;
+        } else {
+            door.door.position.x = -131.5;
+        }
+            
+        console.log(door.door.position.x);
+        door.door.position.z = 500 + Math.floor(Math.random() * 50) - 25;
+
+
+        this.door.add(door.door);
+        this.doorsInUse.push(door);
+}
+
+DoorHolder.prototype.update = function () {
+    for (var i = 0; i < this.doorsInUse.length; i++) {
+        var door = this.doorsInUse[i];
+        door.door.position.z -= level.velocity;
+
+        if (door.door.position.z < -350) {
+            doorPool.unshift(this.doorsInUse.splice(i, 1)[0]);
+            this.door.remove(door.door);
+            i--;
+        }
+    }
+}
+
+function createDoors() {
+    for (var i = 0; i < 2; i++) {
+        var door = new Door();
+        doorPool.push(door);
+    }
+
+    doorHolder = new DoorHolder();
+    room.add(doorHolder.door);
+}
+
 function collition() {
     if (level.life - 15 > 0) { 
         level.life = level.life - 15;
@@ -174,12 +327,3 @@ function die() {
     console.log("MUERTO");
 }
 
-function createBoxes() {
-    for (var i = 0; i < 10; i++) {
-        var box = new Box();
-        boxesPool.push(box);
-    }
-
-    boxesHolder = new BoxesHolder();
-    room.add(boxesHolder.mesh);
-}

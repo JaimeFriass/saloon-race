@@ -261,6 +261,7 @@ function render() {
     room.getCameraControls().update ();
     //room.animate(GUIcontrols);
     boxesHolder.update(room.car.getPos());
+    doorHolder.update();
     
   }
   requestAnimationFrame(render);
@@ -287,6 +288,7 @@ $(function () {
   text_sound = document.getElementById("audio_text");
   createParticles();
   createBoxes();
+  createDoors();
 
   setLevel(0);
   $("#start").fadeIn(3500);

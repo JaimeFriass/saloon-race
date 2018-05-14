@@ -10,8 +10,8 @@ var Colors = {
 var GroundTextures = [
     "imgs/wood.jpg",
     "imgs/wood2.jpg",
-    "imgs/kitchen.jpg",
     "imgs/wood.jpg",
+    "imgs/kitchen.jpg",
     "imgs/wood.jpg",
     "imgs/wood2.jpg",
     "imgs/wood.jpg",
@@ -24,6 +24,7 @@ class Saloon extends THREE.Object3D {
         this.ground = null;
         this.carpet = null;
         this.midWall = null;
+        this.door = null;
         this.table = new THREE.Object3D();
         this.box = null;
         this.velocity = 1;
@@ -38,7 +39,6 @@ class Saloon extends THREE.Object3D {
         this.createCarpets();
         this.box = this.createBox();
         this.createTable();
-        //this.add(this.box);
     }
 
     createWalls() {
@@ -56,14 +56,14 @@ class Saloon extends THREE.Object3D {
         wall2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, -150));
         //this.add(wall2);
         var wall3 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 300, 700),
+            new THREE.BoxGeometry(1, 300, 800),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         wall3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-130, 150,0));
         this.add(wall3);
         
         var wall4 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 300, 700),
+            new THREE.BoxGeometry(1, 300, 800),
             new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
         wall4.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(130, 150,0));
@@ -132,6 +132,7 @@ class Saloon extends THREE.Object3D {
         if (this.midWall != null) {
             if (this.midWall.position.z > -2000) {
                 this.midWall.position.z = this.midWall.position.z - this.velocity;
+                //this.door.position.z = this.door.position.z - this.velocity;
             } else {
                 this.midWall.position.z = -3000;
                 this.remove(this.midWall);
