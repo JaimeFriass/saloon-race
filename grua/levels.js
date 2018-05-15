@@ -45,10 +45,10 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
-                life: 200,
+                life: 100,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
-                distanceForBoxSpawn: 2000,
+                distanceForBoxSpawn: 100,
                 lights: true,
             };
             document.getElementById("level_id").innerHTML = "Level 1";
@@ -67,7 +67,8 @@ function setLevel(num) {
                 distanceForBoxSpawn: 60,
                 lights: true,
             };
-            document.getElementById("level_id").innerHTML = "Level 2";
+            //document.getElementById("level_id").innerHTML = "Level 2";
+            $("#level_id").text("Level 2");
             showText("Level 2", "A bit faster");
             break;
         case 3:

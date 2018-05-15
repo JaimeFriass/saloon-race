@@ -19,8 +19,8 @@ body{
     top: 20px; left: 200px;
     width: 35%;
     height: 12px;
-    background-color: rgb(240, 191, 128);
-    border: solid rgb(143, 76, 0) 1px;
+    background-color: rgba(240, 191, 128, 0.3);
+    border: solid rgba(143, 76, 0, 0.5) 1px;
     border-radius: 4px;
     padding: 2px 2px 2px 2px;
 }
@@ -28,7 +28,7 @@ body{
 #level_progress {
     width: 100%;
     height: 10px;
-    background-color: rgb(240, 158, 51);
+    background-color: rgba(240, 158, 51, 0.115);
     border-radius: 2px;
     transition: 0.5s ease-in;
 }
@@ -142,15 +142,19 @@ div.menu h2 {
 #start a.btn {
     padding-left: 50px;
     padding-right: 50px;
-    background-color: rgb(255, 231, 196);
-    transition: 0.1s;
+    background-color: rgb(248, 197, 120);
+    transition: 0.5s;
     cursor: pointer;
     user-select: none;
+    letter-spacing: normal;
     -moz-user-select: none;
+    box-shadow: #693f00 2px 2px 5px;
 }
 
 #start a.btn:hover {
-    background-color: white;
+    background-color: rgb(255, 228, 188);
+    letter-spacing: 6px;
+    box-shadow: #693f00 5px 5px 15px;
 }
 
 #restart {

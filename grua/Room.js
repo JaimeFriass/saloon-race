@@ -19,11 +19,21 @@ class Room extends THREE.Scene {
         this.axis = new THREE.AxisHelper (35);
         this.axis.visible = false;
         this.add (this.axis);
-
+        this.sound = this.createMusic();
         // Audio in scene
+        this.listener = new THREE.AudioListener();
+        this.camera.add(this.listener);
+        
+
+        this.fog = new THREE.Fog(new THREE.Color( 0xF5986E ), 500, 630);
+        this.background = new THREE.Color( 0xF5986E );
+        //this.add(this.fog);
+      }
+
+    createMusic() {
         var listener = new THREE.AudioListener();
         this.camera.add(listener);
-        
+
         var sound = new THREE.Audio(listener);
         var audioLoader = new THREE.AudioLoader();
         audioLoader.load('models/background.ogg', function (buffer) {
@@ -31,14 +41,22 @@ class Room extends THREE.Scene {
             sound.setLoop(true);
             sound.setVolume(0.7);
             sound.play();
-});
-        this.fog = new THREE.Fog(new THREE.Color( 0xF5DA81 ), 300, 1000);
-        //this.add(this.fog);
-      }
+        });
+
+        return sound;
+    }
 
     setVelocity(vel) {
         this.velocity = vel;
         this.saloon.velocity = vel;
+    }
+
+    stopMusic() {
+        this.sound.stop();
+    }
+
+    playMusic() {
+        this.sound.play();
     }
 
     createCamera (renderer) {
@@ -87,6 +105,7 @@ class Room extends THREE.Scene {
         this.spotLight.shadow.mapSize.width=2048
         this.spotLight.shadow.mapSize.height=2048;
         this.spotLight.intensity = 0.5;
+        this.spotLight.penumbra = 0.2;
         this.add (this.spotLight);
     }
 
@@ -97,10 +116,11 @@ class Room extends THREE.Scene {
             this.camera.position.z = this.camera.position.z + 0.2;
         }
 
+        // TODO: Movimientos cámara en función del nivel
         if (this.camera.position.z > 180) {
             this.voltear = true;
         }
-        if (this.camera.position.z < 3) {
+        if (this.camera.position.z < 10) {
             this.voltear = false;
         }
 
@@ -110,35 +130,6 @@ class Room extends THREE.Scene {
         } else {
             this.spotLight.position.z = 600;
         }
-
-        /*
-        if (this.prueba.position.z > -100) {
-            this.prueba.position.z = this.prueba.position.z - this.velocity;
-        } else {
-            this.prueba.position.z = 200;
-        }
-        var globalBoxPosition = this.saloon.getPosBox();
-        var vectorBetweenObjects = new THREE.Vector2();
-        /*
-        vectorBetweenObjects.subVectors(new THREE.Vector2 (this.saloon.getPosBox().x, this.saloon.getPosBox().z),
-                                        new THREE.Vector2 (this.car.getPos().x, this.car.getPos().z));
-        */
-        /*
-        var disX = Math.abs(this.prueba.position.x - this.car.getPos().x);
-        var disZ = Math.abs(this.prueba.position.z - this.car.getPos().z);
-        */
-       /*
-        //var diffPos = globalCarPosition.sub(globalBoxPosition);
-        var d = vectorBetweenObjects.length;
-        //console.log(disX);
-        if (disX < 10 && disZ < 20) {
-            particlesHolder.spawnParticles(this.prueba.position, 15, Colors.red, 3);
-            this.remove(this.prueba);
-            var object = this.getObjectByName(this.prueba.name);
-            this.remove(object);
-            this.prueba.visible = false;
-        }
-        */
     }
 
 

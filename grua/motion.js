@@ -12,7 +12,7 @@ function loop() {
         boxesHolder.spawnBoxes();
     }
 
-    if (Math.floor(level.distance) % 1000 == 0 && Math.floor(level.distance) > level.doorLastSpawn) {
+    if (Math.floor(level.distance) % 600 == 0 && Math.floor(level.distance) > level.doorLastSpawn) {
         level.doorLastSpawn = Math.floor(level.distance);
         doorHolder.spawnDoor();
     }
@@ -113,14 +113,17 @@ var BoxColor = [
 
 
 Box = function () {
-    var random = Math.random()*10;
+    var random = Math.random()*15;
     var box_color = BoxColor[Math.floor(Math.random()*(BoxColor.length - 1))];
 
-    if (random > 4) {
-        var height = Math.floor( Math.random() * 20);
+    if (random > 4 && random <= 10) {
+        var height = Math.floor( Math.random() * 35);
         var geom = new THREE.BoxGeometry(13, 10 + height, 8);
-    } else {
+    } else if (random > 0 && random <= 4) {
         var geom = new THREE.TetrahedronGeometry(8, 2);
+    } else {
+        var height = Math.floor( Math.random() * 35);
+        var geom = new THREE.ConeGeometry( 20, 20 + height, 4 );
     }
 
     var mat = new THREE.MeshPhongMaterial({
@@ -142,6 +145,7 @@ BoxesHolder = function () {
 }
 
 BoxesHolder.prototype.spawnBoxes = function () {
+    var width_spawn = 255;
 
     for (var i = 0; i < level.nBoxes; i++) {
         var box;
@@ -149,10 +153,9 @@ BoxesHolder.prototype.spawnBoxes = function () {
             box = BoxesPool.pop();
         else {
             box = new Box();
-            //console.log("Creando caja");
         }
 
-        box.mesh.position.x = Math.floor(Math.random() * 258 ) - 129;
+        box.mesh.position.x = Math.floor(Math.random() * width_spawn ) - width_spawn/2;
         box.mesh.position.z = 300 + Math.floor(Math.random() * 50) - 25;
 
         this.mesh.add(box.mesh);
@@ -271,7 +274,6 @@ DoorHolder.prototype.spawnDoor = function () {
             door = DoorPool.pop();
         else {
             door = new Door();
-            //console.log("Creando caja");
         }
 
         var random = Math.floor( Math.random() * 10 );
@@ -283,7 +285,6 @@ DoorHolder.prototype.spawnDoor = function () {
             door.door.position.x = -131.5;
         }
             
-        console.log(door.door.position.x);
         door.door.position.z = 500 + Math.floor(Math.random() * 50) - 25;
 
 

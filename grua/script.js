@@ -21,6 +21,7 @@ pause = false;
 
 click_sound = null;
 text_sound = null;
+music = true;
 
 /// It creates the GUI and, optionally, adds statistic information
 /**
@@ -250,6 +251,29 @@ function setLights(light) {
   }
 }
 
+function toggleLights() {
+  if (level.lights) {
+    setLights(false);
+    $("#st-lights").text("Lights: Off");
+  } else {
+    setLights(true);
+    $("#st-lights").text("Lights: On");
+  }
+}
+
+function toggleMusic() {
+  
+  if (music) {
+    room.stopMusic();
+    $("#st-music").text("Music: Off");
+    music = false;
+  } else {
+    room.playMusic();
+    $("#st-music").text("Music: On");
+    music = true;
+  }
+}
+
 /// It renders every frame
 function render() {
   if (!pause) {
@@ -272,6 +296,7 @@ function render() {
 $(function () {
   // create a render and set the size
   renderer = createRenderer();
+  renderer.sortObjects = false;
   // add the output of the renderer to the html element
   $("#WebGL-output").append(renderer.domElement);
   // liseners
@@ -284,13 +309,15 @@ $(function () {
   
   // create a room, that will hold all our elements such as objects, cameras and lights.
   room = new Room (renderer.domElement);
+  music = true;
   click_sound = document.getElementById("audio_click");
   text_sound = document.getElementById("audio_text");
+  setLevel(0);
   createParticles();
   createBoxes();
   createDoors();
 
-  setLevel(0);
+  
   $("#start").fadeIn(3500);
   createGUI(false);
 

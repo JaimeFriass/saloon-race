@@ -11,8 +11,8 @@ var GroundTextures = [
     "imgs/wood.jpg",
     "imgs/wood2.jpg",
     "imgs/wood.jpg",
-    "imgs/kitchen.jpg",
     "imgs/wood.jpg",
+    "imgs/kitchen.jpg",
     "imgs/wood2.jpg",
     "imgs/wood.jpg",
 ]
@@ -22,7 +22,7 @@ class Saloon extends THREE.Object3D {
         super();
         this.walls = null;
         this.ground = null;
-        this.carpet = null;
+        //this.carpet = null;
         this.midWall = null;
         this.door = null;
         this.table = new THREE.Object3D();
@@ -36,7 +36,7 @@ class Saloon extends THREE.Object3D {
         this.currentLevel1 = 0;
         this.currentLevel2 = 0;
         this.createWalls();
-        this.createCarpets();
+        //this.createCarpets();
         this.box = this.createBox();
         this.createTable();
     }
@@ -56,15 +56,15 @@ class Saloon extends THREE.Object3D {
         wall2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, -150));
         //this.add(wall2);
         var wall3 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 300, 800),
+            new THREE.BoxGeometry(1, 300, 1000),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         wall3.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-130, 150,0));
         this.add(wall3);
         
         var wall4 = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 300, 800),
-            new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
+            new THREE.BoxGeometry(1, 300, 1000),
+            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
         )
         wall4.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(130, 150,0));
         this.add(wall4);
@@ -76,7 +76,7 @@ class Saloon extends THREE.Object3D {
         wood.wrapT = THREE.RepeatWrapping;
         wood.repeat.set( 8, 8 );
         var ground = new THREE.Mesh (
-          new THREE.BoxGeometry (400, 0.2, 800, 1, 1, 1),
+          new THREE.BoxGeometry (260, 0.2, 800, 1, 1, 1),
           new THREE.MeshPhongMaterial ({map: wood}));
         ground.applyMatrix (new THREE.Matrix4().makeTranslation (0,-0.1,0));
         ground.receiveShadow = true;
@@ -111,7 +111,7 @@ class Saloon extends THREE.Object3D {
         } else {
             
             if (level.current != this.currentLevel1 ) {
-                console.log("GROUND 1 = level.current: " + level.current + " currentLevel: " + this.currentLevel1);
+                //console.log("GROUND 1 = level.current: " + level.current + " currentLevel: " + this.currentLevel1);
                 this.nextChunk(1);
             } else {
                 this.ground1.position.z = 550;
@@ -120,9 +120,8 @@ class Saloon extends THREE.Object3D {
         if (this.ground2.position.z > -793) {
             this.ground2.position.z = this.ground2.position.z - this.velocity;
         } else {
-            console.log("GROUND 2 = level.current: " + level.current + " currentLevel: " + this.currentLevel2);
+            //console.log("GROUND 2 = level.current: " + level.current + " currentLevel: " + this.currentLevel2);
             if (level.current != this.currentLevel2) {
-                
                 this.nextChunk(2);
             } else {
                 this.ground2.position.z = 550;
@@ -138,14 +137,6 @@ class Saloon extends THREE.Object3D {
                 this.remove(this.midWall);
                 this.midWall.position.z = -3000;
             }
-        }
-
-        // Carpet
-        if (this.carpet.position.z > -1000) {
-            this.carpet.position.z = this.carpet.position.z - this.velocity;
-        } else {
-            this.carpet.position.z = 1000;
-            this.carpet.position.x = 70 - Math.floor((Math.random() * 70));
         }
 
         // Boxes
@@ -216,7 +207,7 @@ class Saloon extends THREE.Object3D {
             new THREE.MeshPhongMaterial({color:Colors.red, flatShading: true})
         )
         this.carpet.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(130, 0.4 , 300));
-        this.add(this.carpet);
+        //this.add(this.carpet);
     }
 
     createTable() {
