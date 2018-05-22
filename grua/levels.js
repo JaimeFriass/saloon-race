@@ -16,6 +16,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 1000,
                 lights: true,
+                camera: 1,
             }
             showText("You died", "little piece of shit");
             document.getElementById("level_id").innerHTML = "Dead";
@@ -34,6 +35,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 1000,
                 lights: true,
+                camera: 2,
             }
             document.getElementById("level_id").innerHTML = "";
             break;
@@ -50,6 +52,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 100,
                 lights: true,
+                camera: 1,
             };
             document.getElementById("level_id").innerHTML = "Level 1";
             showText("Level 1", "Easy for beginners");
@@ -66,6 +69,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 60,
                 lights: true,
+                camera: 1,
             };
             //document.getElementById("level_id").innerHTML = "Level 2";
             $("#level_id").text("Level 2");
@@ -83,6 +87,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 8,
                 lights: true,
+                camera: 2,
             }
             document.getElementById("level_id").innerHTML = "Level 3";
             showText("Level 3", "Slowly, but more boxes");
@@ -100,6 +105,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 20,
                 lights: false,
+                camera: 3,
             }
             document.getElementById("level_id").innerHTML = "Level 4";
             showText("Level 4", "Where are the lights??");
@@ -117,6 +123,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 40,
                 lights: true,
+                camera: 1,
             }
             document.getElementById("level_id").innerHTML = "Level 5";
             showText("Level 5", "Harder");
@@ -134,6 +141,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 70,
                 lights: true,
+                camera: 1,
             }
             document.getElementById("level_id").innerHTML = "Level 6";
             showText("Level 6", "Fuck u");
@@ -142,5 +150,6 @@ function setLevel(num) {
     }
     room.setVelocity(level.velocity);
     setLights(level.lights);
+    room.setCamera(level.camera);
 
 }

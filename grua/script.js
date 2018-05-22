@@ -23,6 +23,8 @@ click_sound = null;
 text_sound = null;
 music = true;
 
+crash = false;
+
 /// It creates the GUI and, optionally, adds statistic information
 /**
  * @param withStats - A boolean to show the statictics or not
@@ -195,6 +197,7 @@ function showStart() {
 function hideStart() {
   document.getElementById("start").style.display = "none";
   document.getElementById("game").style.filter = "none";
+  window.addEventListener ("keydown", onKeyDown, false);
   setLevel(1);
   click_sound.play();
 }
@@ -242,10 +245,12 @@ function settingLevel(number) {
 function setLights(light) {
   if (light) {
     room.turnOnLights();
+    room.car.turnOffLamps();
     $("#text").css("color", "rgb(150, 89, 10)");
     $("#level_id").css("color", "rgb(150, 89, 10)");
   } else {
     room.turnOffLights();
+    room.car.turnOnLamps();
     $("#text").css("color", "white");
     $("#level_id").css("color", "white");
   }
@@ -278,6 +283,7 @@ function toggleMusic() {
 function render() {
   if (!pause) {
     room.update();
+    room.updateCamera(level.camera);
     loop();
     updateLife();
     updateCar();
@@ -286,7 +292,7 @@ function render() {
     //room.animate(GUIcontrols);
     boxesHolder.update(room.car.getPos());
     doorHolder.update();
-    
+    lampHolder.update();
   }
   requestAnimationFrame(render);
   renderer.render(room, room.getCamera());
@@ -303,7 +309,6 @@ $(function () {
   window.addEventListener ("resize", onWindowResize);
   window.addEventListener('mousemove', onMouseMove, false);
   window.addEventListener ("mousedown", onMouseDown, true);
-  window.addEventListener ("keydown", onKeyDown, false);
   window.addEventListener ("mousewheel", onMouseWheel, true);   // For Chrome an others
   window.addEventListener ("DOMMouseScroll", onMouseWheel, true); // For Firefox
   
@@ -316,6 +321,8 @@ $(function () {
   createParticles();
   createBoxes();
   createDoors();
+  createLamps();
+  initSound();
 
   
   $("#start").fadeIn(3500);

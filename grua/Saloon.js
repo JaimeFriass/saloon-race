@@ -37,7 +37,6 @@ class Saloon extends THREE.Object3D {
         this.currentLevel2 = 0;
         this.createWalls();
         //this.createCarpets();
-        this.box = this.createBox();
         this.createTable();
     }
 
@@ -84,16 +83,6 @@ class Saloon extends THREE.Object3D {
         return ground;
     }
 
-    createBox() {
-        var box = new THREE.Mesh (
-            new THREE.BoxGeometry(20, 20, 20),
-            new THREE.MeshPhongMaterial({color:Colors.brownDark, flatShading: true})
-        )
-        box.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(-100, 10, -200));
-
-        return box;
-    }
-
     getPosBox() {
         var globalBoxPosition = new THREE.Vector3();
         globalBoxPosition.setFromMatrixPosition(this.box.matrixWorld);
@@ -137,14 +126,6 @@ class Saloon extends THREE.Object3D {
                 this.remove(this.midWall);
                 this.midWall.position.z = -3000;
             }
-        }
-
-        // Boxes
-        if (this.box.position.z > -200) {
-            this.box.position.z = this.box.position.z - this.velocity;
-        } else {
-            this.box.position.z = 440;
-            this.box.position.x = 100 - Math.floor((Math.random() * 200));
         }
 
         // Table

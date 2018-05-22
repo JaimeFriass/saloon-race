@@ -1,7 +1,19 @@
 var particlesPool = [];
 var particlesInUse = [];
+
 var boxesPool = [];
+var lampPool = [];
 var doorPool = [];
+var listener;
+var sound;
+var audioLoader;
+
+function initSound() {
+    listener = new THREE.AudioListener();
+    room.camera.add(listener);
+    sound = new THREE.Audio(listener);
+    audioLoader = new THREE.AudioLoader();
+}
 
 var level;
 
@@ -45,6 +57,7 @@ Particle = function () {
 }
 
 Particle.prototype.explode = function (pos, col, scale) {
+
     var _this = this;
     var _p = this.mesh.parent;
     this.mesh.material.color = new THREE.Color(col);
@@ -72,6 +85,7 @@ ParticlesHolder = function () {
 ParticlesHolder.prototype.spawnParticles = function (pos, density, color, scale) {
 
     var nParticles = density;
+    
     for (var i = 0; i < nParticles; i++) {
         var particle;
         if (particlesPool.length) {
@@ -84,8 +98,26 @@ ParticlesHolder.prototype.spawnParticles = function (pos, density, color, scale)
         var _this = this;
         particle.mesh.position.y = pos.y;
         particle.mesh.position.x = pos.x - 8;
+        particle.mesh.position.z = pos.z;
         particle.explode(pos, color, scale);
     }
+    var rand = Math.floor(Math.random()*10);
+    
+    if (rand > 3) {
+        var glass = "models/glass1.wav";
+    } else  if (rand > 7) {
+        var glass = "models/glass2.wav";
+    } else {
+        var glass = "models/glass3.wav";
+    }
+    audioLoader.load(glass, function (buffer ) {
+        sound.setBuffer(buffer);
+        sound.setLoop(false);
+        sound.isPlaying = false;
+        sound.setVolume(0.2);
+        sound.play(); 
+     });
+     
 }
 
 function createParticles() {
@@ -136,6 +168,7 @@ Box = function () {
     this.color = box_color;
     this.mesh = new THREE.Mesh(geom, mat);
     this.mesh.rotation.y = Math.random()*6 - 3;
+    this.mesh.position.y = height/2;
     this.mesh.castShadow = true;
 }
 
@@ -145,7 +178,7 @@ BoxesHolder = function () {
 }
 
 BoxesHolder.prototype.spawnBoxes = function () {
-    var width_spawn = 255;
+    var width_spawn = 245;
 
     for (var i = 0; i < level.nBoxes; i++) {
         var box;
@@ -156,7 +189,7 @@ BoxesHolder.prototype.spawnBoxes = function () {
         }
 
         box.mesh.position.x = Math.floor(Math.random() * width_spawn ) - width_spawn/2;
-        box.mesh.position.z = 300 + Math.floor(Math.random() * 50) - 25;
+        box.mesh.position.z = 500 + Math.floor(Math.random() * 50) - 25;
 
         this.mesh.add(box.mesh);
         this.boxesInUse.push(box);
@@ -175,12 +208,12 @@ BoxesHolder.prototype.update = function (car_position) {
         //console.log(d);
         if (difX < 13 && difZ < 15) {
             //console.log("COLISIONA!!");
-            particlesHolder.spawnParticles(box.mesh.position.clone(), 15, box.color, 3);
+            particlesHolder.spawnParticles(car_position, 15, box.color, 3);
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
             this.mesh.remove(box.mesh);
             collition();
             i--;
-        } else if (box.mesh.position.z < -350) {
+        } else if (box.mesh.position.z < -450) {
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
             this.mesh.remove(box.mesh);
             i--;
@@ -314,6 +347,78 @@ function createDoors() {
     doorHolder = new DoorHolder();
     room.add(doorHolder.door);
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////
+//                                DOORS                                           //
+////////////////////////////////////////////////////////////////////////////////////
+
+Lamp = function () {
+    var lamp = new THREE.Object3D();
+    this.lamp = new THREE.Object3D();
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath('models/');
+
+    mtlLoader.load('lamp.mtl', function (materials) {
+        materials.preload();
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials(materials);
+        objLoader.setPath('models/');
+        objLoader.load('lamp.obj', 
+        function(object) {
+            object.position.y = 30;
+            object.scale.y = 2;
+            object.castShadow = true;
+            lamp.add(object);
+        });
+    });
+
+    console.log("Creando LAMP");
+    this.lamp.add(lamp);
+}
+
+LampHolder = function () {
+    this.lamp = new THREE.Object3D();
+    this.lampsInUse = [];
+}
+
+LampHolder.prototype.spawnLamp = function () {
+        var lamp;
+        if (doorHolder.length)
+            lamp = LampPool.pop();
+        else {
+            lamp = new Lamp();
+        }
+            
+        //lamp.lamp.position.z = 500 + Math.floor(Math.random() * 50) - 25;
+        lamp.lamp.position.z = 0;
+        this.lamp.add(lamp.lamp);
+        this.lampsInUse.push(lamp);
+}
+
+LampHolder.prototype.update = function () {
+    for (var i = 0; i < this.lampsInUse.length; i++) {
+        var lamp = this.lampsInUse[i];
+        //lamp.lamp.position.z -= level.velocity;
+
+        if (lamp.lamp.position.z < -350) {
+            lampPool.unshift(this.lampsInUse.splice(i, 1)[0]);
+            this.lamp.remove(lamp.lamp);
+            i--;
+        }
+    }
+}
+
+function createLamps() {
+    for (var i = 0; i < 2; i++) {
+        var lamp = new Lamp();
+        lampPool.push(lamp);
+    }
+
+    lampHolder = new LampHolder();
+    room.add(lampHolder.lamp);
+}
+
 
 function collition() {
     if (level.life - 15 > 0) { 

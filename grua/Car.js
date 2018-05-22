@@ -31,10 +31,11 @@ class Car extends THREE.Object3D {
     turnOnLamps() {
         this.lamp1.intensity = 0.7;
         this.lamp2.intensity = 0.7;
+        this.neon.intensity = 0.3;
     }
 
     turnOffLamps() {
-        this.lamp1.intensity = this.lamp2.intensity = 0;
+        this.lamp1.intensity = this.lamp2.intensity = this.neon.intensity = 0;
     }
 
     createDefinedCar() {

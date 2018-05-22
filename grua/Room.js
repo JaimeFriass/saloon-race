@@ -8,14 +8,15 @@ class Room extends THREE.Scene {
         this.spotLight = null;
         this.trackballControls = null;
         this.camera = null;
+        this.viewpoint = null;
         this.saloon = new Saloon({});
         this.add(this.saloon);
         this.car = new Car({});
         this.add(this.car);
         this.createLights();
+        //this.lamp = this.createLamp();
+        //this.add(this.lamp);
         this.createCamera(renderer);
-        //this.prueba = this.createPrueba();
-        //this.add(this.prueba);
         this.axis = new THREE.AxisHelper (35);
         this.axis.visible = false;
         this.add (this.axis);
@@ -77,19 +78,6 @@ class Room extends THREE.Scene {
 
     }
 
-    createPrueba() {
-        var prueba = new THREE.Mesh(
-            new THREE.BoxGeometry(10, 10, 10),
-            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading:true})
-        )
-        prueba.name = "cajita";
-
-        prueba.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 5, 0));
-        prueba.position.x = 20;
-
-        return prueba;
-    }
-
     createLights() {
         this.ambientLight = new THREE.AmbientLight(0xccddee, 0.8);
         this.add (this.ambientLight);
@@ -101,34 +89,121 @@ class Room extends THREE.Scene {
         this.spotLight = new THREE.SpotLight( 0xffffff );
         this.spotLight.position.set( 200, 200, 200 );
         this.spotLight.castShadow = true;
+
+        this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50), new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true}));
+        this.viewpoint.position.set(0, 40, 0);
         // the shadow resolution
         this.spotLight.shadow.mapSize.width=2048
         this.spotLight.shadow.mapSize.height=2048;
-        this.spotLight.intensity = 0.5;
+        this.spotLight.target = this.viewpoint;
+        this.spotLight.intensity = 0.3;
         this.spotLight.penumbra = 0.2;
+        this.add(this.viewpoint);
         this.add (this.spotLight);
     }
 
-    update() {
-        if (this.voltear) {
-            this.camera.position.z = this.camera.position.z - 0.2;
-        } else {
-            this.camera.position.z = this.camera.position.z + 0.2;
-        }
+    createLamp() {
+        var lamp = new THREE.Object3D();
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('models/');
+    
+        mtlLoader.load('lamp.mtl', function (materials) {
+            materials.preload();
+            var objLoader = new THREE.OBJLoader()
+            objLoader.setMaterials(materials);
+            objLoader.setPath('models/');
+            objLoader.load('lamp.obj', 
+            function(object) {
+                object.position.y = 30;
+                object.position.x = -125;
+                object.rotation.x = (Math.PI/180)*270;
+                object.rotation.z = (Math.PI/180)*90;
+                object.scale.y = 1;
+                object.castShadow = true;
+                lamp.add(object);
+            });
+        });
+    
+        var light = new THREE.PointLight(0xFFFFFF, 1, 200);
+        light.position.y=20;
+        lamp.add(light);
+        return lamp;
+    }
 
-        // TODO: Movimientos cámara en función del nivel
-        if (this.camera.position.z > 180) {
-            this.voltear = true;
+    setCamera(type) {
+        switch (type) {
+            case 1:
+                this.camera.position.set (0, 200, 100);
+                break;
+            case 2:
+                this.camera.position.set(-50, 30, 130);
+                break;
+            case 3:
+                this.camera.position.set(-30, 30, -100);
+                break;
         }
-        if (this.camera.position.z < 10) {
-            this.voltear = false;
+        this.voltear = false;
+    }
+
+    updateCamera(type) {
+        switch (type) {
+            case 1:
+                if (this.voltear)
+                    this.camera.position.z = this.camera.position.z - 0.2;
+                else
+                    this.camera.position.z = this.camera.position.z + 0.2;
+
+                if (this.camera.position.z > 180)
+                    this.voltear = true;
+                
+                if (this.camera.position.z < 10)
+                    this.voltear = false;
+
+                break;
+            case 2:
+                if (this.voltear)
+                    this.camera.position.x = this.camera.position.x - 0.2;
+                else
+                    this.camera.position.x = this.camera.position.x + 0.2;
+
+                if (this.camera.position.x > 100)
+                    this.voltear = true;
+                
+                if (this.camera.position.x < -100)
+                    this.voltear = false;
+                break;
+
+            case 3:
+                if (this.voltear)
+                    this.camera.position.x = this.camera.position.x - 0.2;
+                else
+                    this.camera.position.x = this.camera.position.x + 0.2;
+
+                if (this.camera.position.x > 100)
+                    this.voltear = true;
+                
+                if (this.camera.position.x < -100)
+                    this.voltear = false;
+                break;
         }
+    }
+
+    update() {
+        /*
+        if (this.lamp.position.z > -600) {
+            this.lamp.position.z = this.lamp.position.z - this.velocity;
+        } else {
+            this.lamp.position.z = 600;
+        }
+        */
 
         this.saloon.updateGround();
-        if (this.spotLight.position.z > -600) {
+        if (this.spotLight.position.z > -500) {
             this.spotLight.position.z = this.spotLight.position.z - this.velocity;
+            this.viewpoint.position.z = this.viewpoint.position.z - this.velocity;
         } else {
-            this.spotLight.position.z = 600;
+            this.spotLight.position.z = 700;
+            this.viewpoint.position.z = 700;
         }
     }
 
