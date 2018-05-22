@@ -133,7 +133,11 @@ function updateCar() {
     var targetX = normalize(mousePos.x, -1, 1, -100, 100);
     var targetY = normalize(mousePos.y, -1, 1, 25, 175);
 
-    room.updateCar(targetX, targetY);
+    if (level.camera != 3) {
+      room.updateCar(targetX, targetY);
+    } else {
+      room.updateCar(-targetX, targetY);
+    }
   } else {
     //console.log("POS X: " + room.car.getPos().x + " POS Z: " + room.car.getPos().z);
     room.car.position.y = room.car.position.y + 0.5;
@@ -151,9 +155,8 @@ function normalize(v, vmin, vmax, tmin, tmax) {
 } 
 
 function updateLife() {
-  document.getElementById("level_progress").style.width = level.life + "%";
-  document.getElementById("level_progress").style.backgroundColor = "red";
-  document.getElementById("level_progress").style.backgroundColor = "rgb(240, 158, 51)";
+  document.getElementById("level_progress2").style.width = level.life + "%";
+  document.getElementById("level_progress2").style.backgroundColor = "rgb(243, 255, 81)";
 }
 
 function showPause() {
@@ -292,7 +295,6 @@ function render() {
     //room.animate(GUIcontrols);
     boxesHolder.update(room.car.getPos());
     doorHolder.update();
-    lampHolder.update();
   }
   requestAnimationFrame(render);
   renderer.render(room, room.getCamera());
@@ -321,7 +323,6 @@ $(function () {
   createParticles();
   createBoxes();
   createDoors();
-  createLamps();
   initSound();
 
   

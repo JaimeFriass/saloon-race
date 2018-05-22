@@ -102,34 +102,6 @@ class Room extends THREE.Scene {
         this.add (this.spotLight);
     }
 
-    createLamp() {
-        var lamp = new THREE.Object3D();
-        var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setPath('models/');
-    
-        mtlLoader.load('lamp.mtl', function (materials) {
-            materials.preload();
-            var objLoader = new THREE.OBJLoader()
-            objLoader.setMaterials(materials);
-            objLoader.setPath('models/');
-            objLoader.load('lamp.obj', 
-            function(object) {
-                object.position.y = 30;
-                object.position.x = -125;
-                object.rotation.x = (Math.PI/180)*270;
-                object.rotation.z = (Math.PI/180)*90;
-                object.scale.y = 1;
-                object.castShadow = true;
-                lamp.add(object);
-            });
-        });
-    
-        var light = new THREE.PointLight(0xFFFFFF, 1, 200);
-        light.position.y=20;
-        lamp.add(light);
-        return lamp;
-    }
-
     setCamera(type) {
         switch (type) {
             case 1:
@@ -139,7 +111,7 @@ class Room extends THREE.Scene {
                 this.camera.position.set(-50, 30, 130);
                 break;
             case 3:
-                this.camera.position.set(-30, 30, -100);
+                this.camera.position.set(-30, 45, -100);
                 break;
         }
         this.voltear = false;

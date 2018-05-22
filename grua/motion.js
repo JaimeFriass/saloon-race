@@ -152,6 +152,7 @@ Box = function () {
         var height = Math.floor( Math.random() * 35);
         var geom = new THREE.BoxGeometry(13, 10 + height, 8);
     } else if (random > 0 && random <= 4) {
+        var height = 0;
         var geom = new THREE.TetrahedronGeometry(8, 2);
     } else {
         var height = Math.floor( Math.random() * 35);

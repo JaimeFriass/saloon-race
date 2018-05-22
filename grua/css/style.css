@@ -25,13 +25,40 @@ body{
     padding: 2px 2px 2px 2px;
 }
 
-#level_progress {
-    width: 100%;
+img.img_bar {
+    position: absolute;
+    top: 13px;
+    left: 200px;
+    z-index: 2;
+}
+#level_bar2 {
+    position: absolute;
+    top: 28px; left: 220px;
+    background-color: rgb(224, 149, 51);
     height: 10px;
+    width: 550px;
+    border-radius: 4px; 
+    padding: 2px 2px 2px 2px;
+    z-index: 1;
+}
+
+#level_progress2 {
+    width: 100%;
+    height: 12px;
+    background-color: rgba(240, 158, 51, 1);
+    border-radius: 2px;
+    transition: 0.5s ease-in;
+}
+
+#level_progress {
+    height: 10px;
+    width: 100%;
     background-color: rgba(240, 158, 51, 0.115);
     border-radius: 2px;
     transition: 0.5s ease-in;
 }
+
+
 
 #level_id {
     position: absolute;

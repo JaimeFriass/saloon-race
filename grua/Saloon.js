@@ -28,11 +28,18 @@ class Saloon extends THREE.Object3D {
         this.table = new THREE.Object3D();
         this.box = null;
         this.velocity = 1;
+
+        // Interleaved grounds
         this.ground1 = this.createGround(GroundTextures[0]);
         this.ground2 = this.createGround(GroundTextures[0]);
         this.ground2.position.z = 795;
+
+        // Move ground
+        this.ground_traslation = 550;
+
         this.add(this.ground1);
         this.add(this.ground2);
+
         this.currentLevel1 = 0;
         this.currentLevel2 = 0;
         this.createWalls();
@@ -103,7 +110,8 @@ class Saloon extends THREE.Object3D {
                 //console.log("GROUND 1 = level.current: " + level.current + " currentLevel: " + this.currentLevel1);
                 this.nextChunk(1);
             } else {
-                this.ground1.position.z = 550;
+                if ( this.checkGround(1) )
+                    this.ground1.position.z = this.ground_traslation;
             }
         }
         if (this.ground2.position.z > -793) {
@@ -113,7 +121,8 @@ class Saloon extends THREE.Object3D {
             if (level.current != this.currentLevel2) {
                 this.nextChunk(2);
             } else {
-                this.ground2.position.z = 550;
+                if ( this.checkGround(2) )
+                    this.ground2.position.z = this.ground_traslation;
             }
         }
 
@@ -157,29 +166,55 @@ class Saloon extends THREE.Object3D {
     nextChunk(number) {
         console.log("NEXT CHUNK: " + number);
         if (number == 1) {
-            this.remove(this.ground1);
-            this.ground1 = this.createGround(GroundTextures[level.current]);
-            this.currentLevel1++;
-            this.add(this.ground1);
-            this.ground1.position.z = 800;
+            if ( this.checkGround(1)) {
 
-            this.remove(this.midWall);
-            this.midWall = this.createMidWall();
-            this.midWall.position.z = 400;
-            this.add(this.midWall);
-            
+                // Change Ground
+                this.remove(this.ground1);
+                this.ground1 = this.createGround(GroundTextures[level.current]);
+                this.currentLevel1++;
+                this.add(this.ground1);
+                this.ground1.position.z = this.ground_traslation;
+
+                // Midwall
+                this.remove(this.midWall);
+                this.midWall = this.createMidWall();
+                this.midWall.position.z = 400;
+                this.add(this.midWall);
+            }   
         }
         else if (number == 2) {
-            this.remove(this.ground2);
-            this.ground2 = this.createGround(GroundTextures[level.current]);
-            this.currentLevel2++;
-            this.add(this.ground2);
-            this.ground2.position.z = 800;
-            this.remove(this.midWall);
-            this.midWall = this.createMidWall();
-            this.midWall.position.z = 400;
-            this.add(this.midWall);
+            if (this.checkGround(2)) {
+
+                // Change Ground
+                this.remove(this.ground2);
+                this.ground2 = this.createGround(GroundTextures[level.current]);
+                this.currentLevel2++;
+                this.add(this.ground2);
+                this.ground2.position.z = this.ground_traslation;
+
+                // MidWall
+                this.remove(this.midWall);
+                this.midWall = this.createMidWall();
+                this.midWall.position.z = 400;
+                this.add(this.midWall);
+            }
         }
+    }
+
+    checkGround(number) {
+        var devuelve = false;
+        if (number == 1) {
+            var diff = (this.ground1.position.z + this.ground_traslation*2) + (this.ground2.position.z);
+            if (diff < 60.5 ) {
+                devuelve = true;
+            }
+        } else {
+            var diff = (this.ground2.position.z + this.ground_traslation*2) + (this.ground1.position.z);
+            if (diff < 60.5 ) {
+                devuelve = true;
+            }
+        }
+        return devuelve;
     }
 
     createCarpets() {

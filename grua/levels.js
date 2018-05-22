@@ -3,6 +3,8 @@
 /////////////////////////////////////////////////
 
 function setLevel(num) {
+    if (level != undefined)
+        var previous_camera = level.camera;
     switch (num) {
         case -1:
             level = {
@@ -85,7 +87,7 @@ function setLevel(num) {
                 life: 100,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
-                distanceForBoxSpawn: 8,
+                distanceForBoxSpawn: 10,
                 lights: true,
                 camera: 2,
             }
@@ -103,7 +105,7 @@ function setLevel(num) {
                 life: 100,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
-                distanceForBoxSpawn: 20,
+                distanceForBoxSpawn: 25,
                 lights: false,
                 camera: 3,
             }
@@ -129,7 +131,7 @@ function setLevel(num) {
             showText("Level 5", "Harder");
             break;
 
-        case 5:
+        case 6:
             level = {
                 current: 6,
                 velocity: 6,
@@ -150,6 +152,7 @@ function setLevel(num) {
     }
     room.setVelocity(level.velocity);
     setLights(level.lights);
-    room.setCamera(level.camera);
+    if (previous_camera != level.camera)
+        room.setCamera(level.camera);
 
 }
