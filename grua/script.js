@@ -23,6 +23,8 @@ click_sound = null;
 text_sound = null;
 music = true;
 
+died = false;
+
 crash = false;
 
 /// It creates the GUI and, optionally, adds statistic information
@@ -79,7 +81,7 @@ function onKeyDown(event) {
 
   switch(keycode) {
     case 32: // SPACE BAR
-      if (!pause) {
+      if (!pause && !died) {
         showPause();
         pause = true;
       } else if (pause) {
@@ -128,6 +130,137 @@ function createRenderer () {
   return renderer;  
 }
 
+function normalize(v, vmin, vmax, tmin, tmax) {
+  var nv = Math.max (Math.min(v, vmax), vmin);
+  var dv = vmax-vmin;
+  var pc = (nv-vmin)/dv;
+  var dt = tmax - tmin;
+  var tv = tmin + (pc * dt);
+  return tv;
+} 
+
+function updateLife() {
+  document.getElementById("level_progress2").style.width = level.life + "%";
+  document.getElementById("level_progress2").style.backgroundColor = "rgb(243, 255, 81)";
+}
+
+// PAUSE MENU
+
+function showPause() {
+  document.getElementById("game").style.filter = "blur(5px)";
+  //document.getElementById("pause").style.display = "block";
+  $("#pause").fadeIn(500);
+  
+}
+
+function hidePause() {
+  document.getElementById("game").style.filter = "none";
+  //document.getElementById("pause").style.display = "none";
+  $("#pause").fadeOut(500);
+  pause = false;
+  click_sound.play();
+}
+
+// SETTINGS MENU
+
+function settings() {
+  $("#pause").fadeOut(500);
+  $("#settings").fadeIn(500);
+  document.getElementById("st-lights").innerHTML = "Lights: " + level.lights;
+  document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
+  click_sound.play();
+}
+
+function hideSettings() {
+  $("#settings").fadeOut(500);
+  $("#pause").fadeIn(500);
+  click_sound.play();
+
+}
+
+// START MENU
+
+function showStart() {
+  document.getElementById("start").style.display = "block";
+}
+
+function hideStart() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("game").style.filter = "none";
+  window.addEventListener ("keydown", onKeyDown, false);
+  setLevel(1);
+  click_sound.play();
+}
+
+// RESTART MENU
+
+function showRestart() {
+  $("#restart").fadeIn(700);
+}
+
+function restart() {
+  $("#restart").fadeOut(700);
+  setLevel(1);
+  died = false;
+}
+
+// CHOOSE LEVEL MENU
+
+function showChooseLevel() {
+  $("#pause").fadeOut(500);
+  $("#choose_level").fadeIn(500);
+  $("#current_level").html("Current level: " + level.current);
+}
+
+function hideChooseLevel() {
+  $("#choose_level").fadeOut(500);
+  $("#pause").fadeIn(500);
+  click_sound.play();
+}
+
+// Set a level
+function settingLevel(number) {
+  $("#choose_level").fadeOut(500);
+  document.getElementById("game").style.filter = "none";
+  setLevel(number);
+  click_sound.play();
+  pause = false;
+}
+
+// In-game titles
+function showText(title, subtitle) { 
+  $("#text").html(title + "<p>" + subtitle + "</p>");
+  $("#text").fadeIn(2000).fadeOut(2500);
+  text_sound.play();
+}
+
+// Set the lights on or off
+function setLights(light) {
+  if (light) {
+    room.turnOnLights();
+    room.car.turnOffLamps();
+    $("#text").css("color", "rgb(150, 89, 10)");
+    $("#level_id").css("color", "rgb(150, 89, 10)");
+  } else {
+    room.turnOffLights();
+    room.car.turnOnLamps();
+    $("#text").css("color", "white");
+    $("#level_id").css("color", "white");
+  }
+}
+
+// Toggle the lights between on or off
+function toggleLights() {
+  if (level.lights) {
+    setLights(false);
+    $("#st-lights").text("Lights: Off");
+  } else {
+    setLights(true);
+    $("#st-lights").text("Lights: On");
+  }
+}
+
+// Get the cursor and convert it to a movement in scene
 function updateCar() {
   if (level.current != -1) {
     var targetX = normalize(mousePos.x, -1, 1, -100, 100);
@@ -145,130 +278,7 @@ function updateCar() {
   }
 }
 
-function normalize(v, vmin, vmax, tmin, tmax) {
-  var nv = Math.max (Math.min(v, vmax), vmin);
-  var dv = vmax-vmin;
-  var pc = (nv-vmin)/dv;
-  var dt = tmax - tmin;
-  var tv = tmin + (pc * dt);
-  return tv;
-} 
-
-function updateLife() {
-  document.getElementById("level_progress2").style.width = level.life + "%";
-  document.getElementById("level_progress2").style.backgroundColor = "rgb(243, 255, 81)";
-}
-
-function showPause() {
-  document.getElementById("game").style.filter = "blur(5px)";
-  //document.getElementById("pause").style.display = "block";
-  $("#pause").fadeIn(500);
-  
-}
-
-function hidePause() {
-  document.getElementById("game").style.filter = "none";
-  //document.getElementById("pause").style.display = "none";
-  $("#pause").fadeOut(500);
-  pause = false;
-  click_sound.play();
-}
-
-function settings() {
-  //document.getElementById("pause").style.display = "none";
-  $("#pause").fadeOut(500);
-  //document.getElementById("settings").style.display = "block";
-  $("#settings").fadeIn(500);
-  document.getElementById("st-lights").innerHTML = "Lights: " + level.lights;
-  document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
-  click_sound.play();
-}
-
-function hideSettings() {
-  //document.getElementById("settings").style.display = "none";
-  $("#settings").fadeOut(500);
-  //document.getElementById("pause").style.display = "block";
-  $("#pause").fadeIn(500);
-  click_sound.play();
-
-}
-
-function showStart() {
-  document.getElementById("start").style.display = "block";
-}
-
-function hideStart() {
-  document.getElementById("start").style.display = "none";
-  document.getElementById("game").style.filter = "none";
-  window.addEventListener ("keydown", onKeyDown, false);
-  setLevel(1);
-  click_sound.play();
-}
-
-function increaseVelocity() {
-  level.velocity = (level.velocity + 1)%8;
-  document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
-}
-
-function showText(title, subtitle) { 
-  $("#text").html(title + "<p>" + subtitle + "</p>");
-  $("#text").fadeIn(2000).fadeOut(2500);
-  text_sound.play();
-}
-
-function showRestart() {
-  $("#restart").fadeIn(700);
-}
-
-function restart() {
-  $("#restart").fadeOut(700);
-  setLevel(1);
-}
-
-function showChooseLevel() {
-  $("#pause").fadeOut(500);
-  $("#choose_level").fadeIn(500);
-  $("#current_level").html("Current level: " + level.current);
-}
-
-function hideChooseLevel() {
-  $("#choose_level").fadeOut(500);
-  $("#pause").fadeIn(500);
-  click_sound.play();
-}
-
-function settingLevel(number) {
-  $("#choose_level").fadeOut(500);
-  document.getElementById("game").style.filter = "none";
-  setLevel(number);
-  click_sound.play();
-  pause = false;
-}
-
-function setLights(light) {
-  if (light) {
-    room.turnOnLights();
-    room.car.turnOffLamps();
-    $("#text").css("color", "rgb(150, 89, 10)");
-    $("#level_id").css("color", "rgb(150, 89, 10)");
-  } else {
-    room.turnOffLights();
-    room.car.turnOnLamps();
-    $("#text").css("color", "white");
-    $("#level_id").css("color", "white");
-  }
-}
-
-function toggleLights() {
-  if (level.lights) {
-    setLights(false);
-    $("#st-lights").text("Lights: Off");
-  } else {
-    setLights(true);
-    $("#st-lights").text("Lights: On");
-  }
-}
-
+// Toggle the m usic between on or off
 function toggleMusic() {
   
   if (music) {
@@ -280,6 +290,12 @@ function toggleMusic() {
     $("#st-music").text("Music: On");
     music = true;
   }
+}
+
+// Increase velocity
+function increaseVelocity() {
+  level.velocity = (level.velocity + 1)%9 + 1;
+  document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
 }
 
 /// It renders every frame
@@ -307,7 +323,7 @@ $(function () {
   renderer.sortObjects = false;
   // add the output of the renderer to the html element
   $("#WebGL-output").append(renderer.domElement);
-  // liseners
+  // listeners
   window.addEventListener ("resize", onWindowResize);
   window.addEventListener('mousemove', onMouseMove, false);
   window.addEventListener ("mousedown", onMouseDown, true);

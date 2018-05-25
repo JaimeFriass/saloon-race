@@ -147,8 +147,42 @@ function setLevel(num) {
             }
             document.getElementById("level_id").innerHTML = "Level 6";
             showText("Level 6", "Fuck u");
-            document.getElementById("level_id").style.color = "red";
             break; 
+        case 7:
+            level = {
+                current: 7,
+                velocity: 6,
+                acceleration: 1.0001,
+                nBoxes: 1,
+                distance: 0,
+                life: 100,
+                boxLastSpawn: 0,
+                doorLastSpawn: 0,
+                distanceForBoxSpawn: 70,
+                lights: true,
+                camera: 1,
+            }
+            document.getElementById("level_id").innerHTML = "Level 7";
+            showText("Level 7", "Fuck u");
+            break;
+        case 8:
+            level = {
+                current: 8,
+                velocity: 6,
+                acceleration: 1.0001,
+                nBoxes: 1,
+                distance: 0,
+                life: 100,
+                boxLastSpawn: 0,
+                doorLastSpawn: 0,
+                distanceForBoxSpawn: 70,
+                lights: true,
+                camera: 1,
+            }
+            document.getElementById("level_id").innerHTML = "Level 6";
+            showText("Level 8", "Fuck u");
+            document.getElementById("level_id").style.color = "red";
+            break;
     }
     room.setVelocity(level.velocity);
     setLights(level.lights);

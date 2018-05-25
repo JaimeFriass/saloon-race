@@ -374,7 +374,6 @@ Lamp = function () {
         });
     });
 
-    console.log("Creando LAMP");
     this.lamp.add(lamp);
 }
 
@@ -426,11 +425,11 @@ function collition() {
         level.life = level.life - 15;
     } else {
         die();
-        setLevel(-1);
     }
 }
 
 function die() {
-    console.log("MUERTO");
+    setLevel(-1);
+    died = true;
 }
 
