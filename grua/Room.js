@@ -90,7 +90,7 @@ class Room extends THREE.Scene {
         this.spotLight.position.set( 200, 200, 200 );
         this.spotLight.castShadow = true;
 
-        this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50), new THREE.MeshPhongMaterial({color:Colors.brown, flatShading: true}));
+        this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50),0);
         this.viewpoint.position.set(0, 40, 0);
         // the shadow resolution
         this.spotLight.shadow.mapSize.width=2048
@@ -170,12 +170,12 @@ class Room extends THREE.Scene {
         */
 
         this.saloon.updateGround();
-        if (this.spotLight.position.z > -500) {
+        if (this.spotLight.position.z > -700) {
             this.spotLight.position.z = this.spotLight.position.z - this.velocity;
             this.viewpoint.position.z = this.viewpoint.position.z - this.velocity;
         } else {
-            this.spotLight.position.z = 700;
-            this.viewpoint.position.z = 700;
+            this.spotLight.position.z = 800;
+            this.viewpoint.position.z = 800;
         }
     }
 

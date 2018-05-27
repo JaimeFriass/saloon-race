@@ -141,7 +141,7 @@ function normalize(v, vmin, vmax, tmin, tmax) {
 
 function updateLife() {
   document.getElementById("level_progress2").style.width = level.life + "%";
-  document.getElementById("level_progress2").style.backgroundColor = "rgb(243, 255, 81)";
+  //document.getElementById("level_progress2").style.backgroundColor = "rgb(243, 255, 81)";
 }
 
 // PAUSE MENU
@@ -298,6 +298,23 @@ function increaseVelocity() {
   document.getElementById("st-velocity").innerHTML = "Velocity: " + Math.floor(level.velocity);
 }
 
+function createDistanceBar() {
+  var height = $('body').height();
+  /*
+  if (height > 700) {
+    $('#distance2').css("height", "500px");
+  } else if (height > 500) {
+    $('#distance2').css("height", "350px");
+  } else if (height > 250) {
+    $('#distance2').css("height", "200px");
+  */
+  $('#distance2').css("height", height*0.8 + "px");
+}
+
+function updateDistance() {
+  $('#distance2').css("height", ($('body').height()*0.8)* (level.distance/1000) + "px");
+}
+
 /// It renders every frame
 function render() {
   if (!pause) {
@@ -305,6 +322,7 @@ function render() {
     room.updateCamera(level.camera);
     loop();
     updateLife();
+    updateDistance();
     updateCar();
     //stats.update();
     room.getCameraControls().update ();
@@ -336,6 +354,7 @@ $(function () {
   click_sound = document.getElementById("audio_click");
   text_sound = document.getElementById("audio_text");
   setLevel(0);
+  createDistanceBar();
   createParticles();
   createBoxes();
   createDoors();

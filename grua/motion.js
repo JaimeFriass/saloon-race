@@ -422,10 +422,14 @@ function createLamps() {
 
 function collition() {
     if (level.life - 15 > 0) { 
-        level.life = level.life - 15;
+        $('#level_bar2').animate({opacity: '1'}, 100);
+        $('#level_bar2').animate({opacity: '0.2'}, 160);
+        $('#level_bar2').animate({opacity: '1'}, 100);
+        level.life = level.life - Math.floor(Math.random()*10 + level.current);
     } else {
         die();
     }
+
 }
 
 function die() {

@@ -107,7 +107,7 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 distanceForBoxSpawn: 25,
                 lights: false,
-                camera: 3,
+                camera: 2,
             }
             document.getElementById("level_id").innerHTML = "Level 4";
             showText("Level 4", "Where are the lights??");

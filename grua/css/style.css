@@ -48,6 +48,7 @@ img.img_bar {
     background-color: rgba(240, 158, 51, 1);
     border-radius: 2px;
     transition: 0.5s ease-in;
+    background-color: rgb(243, 255, 81);
 }
 
 #level_progress {
@@ -58,8 +59,6 @@ img.img_bar {
     transition: 0.5s ease-in;
 }
 
-
-
 #level_id {
     position: absolute;
     top: 5px; left: 100px;
@@ -67,6 +66,22 @@ img.img_bar {
     font-style: bold;
     color: black;
     text-shadow: black 2px 2px 2px;
+}
+
+#distance2 {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    width: 6px;
+    height: 1px;
+    background-color: #e7a27a;
+    box-shadow: #693f00 2px 2px 2px;
+}
+
+#distance_car {
+    position: absolute;
+    left: 20px;
+    top: 1px;
 }
 
 div.menu {
