@@ -15,6 +15,7 @@ class Car extends THREE.Object3D {
         this.ancho = 6;
         this.lamp1 = null;
         this.lamp2 = null;
+        this.d_spring = null;
         this.viewpoint = null;
         this.car = new THREE.Object3D();
         this.createDefinedCar();
@@ -40,6 +41,9 @@ class Car extends THREE.Object3D {
 
     createDefinedCar() {
         var d_car = new THREE.Object3D();
+        this.d_spring = new THREE.Object3D();
+        var d_spring = new THREE.Object3D();
+
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('models/');
         mtlLoader.load('car.mtl', function (materials) {
@@ -63,7 +67,32 @@ class Car extends THREE.Object3D {
             });
       
         });
+
         this.add(d_car);
+
+        mtlLoader.load('spring.mtl', function (materials) {
+      
+            materials.preload();
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(materials);
+            objLoader.setPath('models/');
+            objLoader.load('spring.obj', 
+            
+            function (object) {
+                object.position.y = 0;
+                object.scale.y = 0.3;
+                object.scale.x = 0.3;
+                object.scale.z = 0.3;
+                object.rotation.x = -Math.PI / 2;
+                object.castShadow = true;
+  
+                d_spring.add(object);
+      
+            });
+      
+        });
+        this.d_spring = d_spring;
+        this.add(this.d_spring);
 
         this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50), 0);
         this.viewpoint.position.set(0, 20, 240);
@@ -71,12 +100,14 @@ class Car extends THREE.Object3D {
         this.lamp1 = new THREE.SpotLight( 0xffffff, 1, 400 );
         this.lamp2 = new THREE.SpotLight( 0xffffff, 1, 400 );
         this.neon = new THREE.PointLight( 0xFF2E2E, 1, 200);
-        this.lamp1.intensity = this.lamp2.intensity = 1;
+        this.lamp1.intensity = this.lamp2.intensity = 3;
+        this.lamp1.decay = this.lamp2.decay = 1;
         this.lamp1.castShadow = true;
         this.lamp2.castShadow = true;
         this.neon.castShadow = true;
 
         this.lamp1.penumbra = this.lamp2.penumbra = 0.8;
+        this.neon.intensity = 5;
         this.neon.penumbra = 0.5;
 
         this.lamp1.target = this.viewpoint;

@@ -116,10 +116,10 @@ class Saloon extends THREE.Object3D {
                     this.ground1.position.z = this.ground_traslation;
             }
         }
+
         if (this.ground2.position.z > -793) {
             this.ground2.position.z = this.ground2.position.z - this.velocity;
         } else {
-            //console.log("GROUND 2 = level.current: " + level.current + " currentLevel: " + this.currentLevel2);
             if (level.current != this.currentLevel2) {
                 this.nextChunk(2);
             } else {
@@ -128,6 +128,7 @@ class Saloon extends THREE.Object3D {
             }
         }
 
+        // Midwall
         if (this.midWall != null) {
             if (this.midWall.position.z > -2000) {
                 this.midWall.position.z = this.midWall.position.z - this.velocity;
@@ -148,6 +149,7 @@ class Saloon extends THREE.Object3D {
         }
     }
 
+    // Creates a dividing wall between different grounds
     createMidWall() {
         var wall1 = new THREE.Mesh(
             new THREE.BoxGeometry(20, 300, 3),
@@ -165,6 +167,7 @@ class Saloon extends THREE.Object3D {
         return wall1;
     }
 
+    // Change the ground texture of a *number* ground
     nextChunk(number) {
         //console.log("NEXT CHUNK: " + number);
         if (number == 1) {
@@ -180,7 +183,7 @@ class Saloon extends THREE.Object3D {
                 // Midwall
                 this.remove(this.midWall);
                 this.midWall = this.createMidWall();
-                this.midWall.position.z = this.ground_traslation;
+                this.midWall.position.z = this.ground_traslation/2;
                 this.add(this.midWall);
             }   
         }
@@ -197,26 +200,28 @@ class Saloon extends THREE.Object3D {
                 // MidWall
                 this.remove(this.midWall);
                 this.midWall = this.createMidWall();
-                this.midWall.position.z = this.ground_traslation;
+                this.midWall.position.z = this.ground_traslation/2;
                 this.add(this.midWall);
             }
         }
     }
 
+    // Checks if the ground can be placed without overlap the other ground
+    // passing the ground number as parameter
     checkGround(number) {
-        var devuelve = false;
+        var returns = false;
         if (number == 1) {
             var diff = (this.ground1.position.z + this.ground_traslation*2) + (this.ground2.position.z);
             if (diff < 60.5 ) {
-                devuelve = true;
+                returns = true;
             }
         } else {
             var diff = (this.ground2.position.z + this.ground_traslation*2) + (this.ground1.position.z);
             if (diff < 60.5 ) {
-                devuelve = true;
+                returns = true;
             }
         }
-        return devuelve;
+        return returns;
     }
 
     createCarpets() {
