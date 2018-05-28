@@ -80,10 +80,12 @@ class Car extends THREE.Object3D {
             
             function (object) {
                 object.position.y = 0;
+                object.position.z = 6.5;
+                object.position.x = -0.7;
                 object.scale.y = 0.3;
                 object.scale.x = 0.3;
                 object.scale.z = 0.3;
-                object.rotation.x = -Math.PI / 2;
+                object.rotation.x = -(Math.PI / 180)*80;
                 object.castShadow = true;
   
                 d_spring.add(object);
@@ -91,7 +93,11 @@ class Car extends THREE.Object3D {
             });
       
         });
-        this.d_spring = d_spring;
+        this.d_spring.add(d_spring);
+        this.d_spring.position.z = -4;
+        this.d_spring.position.x = 1;
+        this.d_spring.rotation.x = -(Math.PI/180)*16;
+        this.d_spring.position.y = -1;
         this.add(this.d_spring);
 
         this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50), 0);

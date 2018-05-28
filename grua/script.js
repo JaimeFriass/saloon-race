@@ -263,7 +263,7 @@ function toggleLights() {
 
 // Get the cursor and convert it to a movement in scene
 function updateCar() {
-  room.car.d_spring.rotation.y += 0.01;
+  room.car.d_spring.rotation.y += 0.07;
   if (level.current != -1) {
     var targetX = normalize(mousePos.x, -1, 1, -100, 100);
     var targetY = normalize(mousePos.y, -1, 1, 25, 175);

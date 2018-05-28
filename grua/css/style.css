@@ -59,6 +59,7 @@ img.img_bar {
     height: 1px;
     background-color: #e7a27a;
     box-shadow: #693f00 2px 2px 2px;
+    background: url("../imgs/btnhover.jpg") repeat-y center;
 }
 
 #distance_car {
@@ -183,12 +184,18 @@ div.menu h2 {
     letter-spacing: normal;
     -moz-user-select: none;
     box-shadow: #693f00 2px 2px 5px;
+
+    background-image: url("../imgs/btnhover.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #start a.btn:hover {
-    background-color: rgb(255, 228, 188);
+    
     letter-spacing: 6px;
     box-shadow: #693f00 5px 5px 15px;
+
+    background-color: rgb(255, 228, 188);
 }
 
 #restart {

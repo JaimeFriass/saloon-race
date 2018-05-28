@@ -10,10 +10,10 @@ var Colors = {
 var GroundTextures = [
     "imgs/wood.jpg", // LEVEL 0
     "imgs/wood2.jpg", // LEVEL 1
-    "imgs/wood.jpg", // LEVEL 2
-    "imgs/wood.jpg", // LEVEL 3
+    "imgs/wood3.jpg", // LEVEL 2
+    "imgs/wood4.jpg", // LEVEL 3
     "imgs/kitchen.jpg", // LEVEL 4
-    "imgs/wood2.jpg", // LEVEL 5
+    "imgs/wood5.jpg", // LEVEL 5
     "imgs/wood.jpg", // LEVEL 6
     "imgs/wood.jpg", // LEVEL 7
     "imgs/wood.jpg", // LEVEL 8
