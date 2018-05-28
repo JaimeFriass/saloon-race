@@ -14,13 +14,12 @@ class Room extends THREE.Scene {
         this.car = new Car({});
         this.add(this.car);
         this.createLights();
-        //this.lamp = this.createLamp();
-        //this.add(this.lamp);
         this.createCamera(renderer);
         this.axis = new THREE.AxisHelper (35);
         this.axis.visible = false;
         this.add (this.axis);
         this.sound = this.createMusic();
+
         // Audio in scene
         this.listener = new THREE.AudioListener();
         this.camera.add(this.listener);
@@ -131,6 +130,14 @@ class Room extends THREE.Scene {
                 if (this.camera.position.z < 10)
                     this.voltear = false;
 
+                if (level.slowed > 150) {
+                    this.camera.position.y = this.camera.position.y + 0.5;
+                } else if (level.slowed > 50)
+                    this.camera.position.y = this.camera.position.y + 0.02;
+                else if (level.slowed > 0)
+                    this.camera.position.y = this.camera.position.y - 0.52;
+                else
+                    this.camera.position.y = 200;
                 break;
             case 2:
                 if (this.voltear)
@@ -161,14 +168,6 @@ class Room extends THREE.Scene {
     }
 
     update() {
-        /*
-        if (this.lamp.position.z > -600) {
-            this.lamp.position.z = this.lamp.position.z - this.velocity;
-        } else {
-            this.lamp.position.z = 600;
-        }
-        */
-
         this.saloon.updateGround();
         if (this.spotLight.position.z > -700) {
             this.spotLight.position.z = this.spotLight.position.z - this.velocity;
@@ -201,11 +200,6 @@ class Room extends THREE.Scene {
     turnOnLights() {
         this.spotLight.intensity = this.ambientLight.intensity = 1;
     }
-
-
-
-
-    
 
     /// It returns the camera
     /**

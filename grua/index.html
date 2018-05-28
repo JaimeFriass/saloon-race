@@ -29,10 +29,6 @@
         <div id="Stats-output">
         </div>
 
-        <!-- Div which will show several messages -->
-        <div style="position:absolute; left:100px; top:10px" id="Messages">
-        </div>
-
         <!-- Div which will hold the Output -->
         <div id="WebGL-output">
         </div>
@@ -47,7 +43,9 @@
         </div>
 
         <div id="level_id">Level 1</div>
+    </div>
 
+    <!-- GENERAL PAUSE MENU -->
     <div id="pause" class="menu">
         <div class="se-slope">
             <div class="se-content">
@@ -55,23 +53,25 @@
                 <h2>Pause</h2><br>
                 <a class="button" onClick="showChooseLevel()">CHOOSE LEVEL</a>
                 <a class="button" onClick="settings()">SETTINGS</a>
-                <a style="background-color: rgb(214, 165, 30)" class="button" onClick="hidePause()">CLOSE</a>
+                <a class="back button" onClick="hidePause()">CLOSE</a>
             </div>
         </div>
     </div>
 
+    <!-- SETTINGS MENU -->
     <div id="settings" class="menu">
-        <div class="se-slope">
+        <div class="se-slope"><br><br>
             <div class="se-content">
                 <a id="st-lights" onclick="toggleLights()" class="button">Lights: </a>
                 <a id="st-velocity" onclick="increaseVelocity()" class="button">Velocity: </a>
                 <a id="st-music" onclick="toggleMusic()" class="button">Music: On</a>
                 <br><br><br><br>
-                <a class="button" onClick="hideSettings()">BACK</a>
+                <a class="back button" onClick="hideSettings()">BACK</a>
             </div>
         </div>
     </div>
 
+    <!-- CHOOSE LEVEL MENU -->
     <div id="choose_level" class="menu">
         <div class="se-slope">
             <div class="se-content">
@@ -86,7 +86,7 @@
                 <a class="btn" onclick="settingLevel(7)">Level 7</a>
                 <a class="btn" onclick="settingLevel(8)">Level 8</a>
                 <br><br><br>
-                <a id="back" class="btn" onclick="hideChooseLevel()">Back</a>
+                <a class="btn back" onclick="hideChooseLevel()">Back</a>
             </div>
         </div>
     </div>
@@ -113,7 +113,7 @@
     </audio>
 
     <div id="restart">
-        <br><br><a class="btn" onclick="restart()">Try again</a>
+        <br><br><a class="btn back" onclick="restart()">Try again</a>
     </div>
 </body>
 

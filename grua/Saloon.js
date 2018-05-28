@@ -8,13 +8,15 @@ var Colors = {
 };
 
 var GroundTextures = [
-    "imgs/wood.jpg",
-    "imgs/wood2.jpg",
-    "imgs/wood.jpg",
-    "imgs/wood.jpg",
-    "imgs/kitchen.jpg",
-    "imgs/wood2.jpg",
-    "imgs/wood.jpg",
+    "imgs/wood.jpg", // LEVEL 0
+    "imgs/wood2.jpg", // LEVEL 1
+    "imgs/wood.jpg", // LEVEL 2
+    "imgs/wood.jpg", // LEVEL 3
+    "imgs/kitchen.jpg", // LEVEL 4
+    "imgs/wood2.jpg", // LEVEL 5
+    "imgs/wood.jpg", // LEVEL 6
+    "imgs/wood.jpg", // LEVEL 7
+    "imgs/wood.jpg", // LEVEL 8
 ]
 
 class Saloon extends THREE.Object3D {
@@ -164,7 +166,7 @@ class Saloon extends THREE.Object3D {
     }
 
     nextChunk(number) {
-        console.log("NEXT CHUNK: " + number);
+        //console.log("NEXT CHUNK: " + number);
         if (number == 1) {
             if ( this.checkGround(1)) {
 
@@ -178,7 +180,7 @@ class Saloon extends THREE.Object3D {
                 // Midwall
                 this.remove(this.midWall);
                 this.midWall = this.createMidWall();
-                this.midWall.position.z = 400;
+                this.midWall.position.z = this.ground_traslation;
                 this.add(this.midWall);
             }   
         }
@@ -195,7 +197,7 @@ class Saloon extends THREE.Object3D {
                 // MidWall
                 this.remove(this.midWall);
                 this.midWall = this.createMidWall();
-                this.midWall.position.z = 400;
+                this.midWall.position.z = this.ground_traslation;
                 this.add(this.midWall);
             }
         }

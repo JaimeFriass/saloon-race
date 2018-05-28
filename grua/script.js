@@ -175,7 +175,6 @@ function hideSettings() {
   $("#settings").fadeOut(500);
   $("#pause").fadeIn(500);
   click_sound.play();
-
 }
 
 // START MENU
@@ -200,6 +199,7 @@ function showRestart() {
 
 function restart() {
   $("#restart").fadeOut(700);
+  click_sound.play();
   setLevel(1);
   died = false;
 }
@@ -258,6 +258,7 @@ function toggleLights() {
     setLights(true);
     $("#st-lights").text("Lights: On");
   }
+  click_sound.play();
 }
 
 // Get the cursor and convert it to a movement in scene
@@ -290,6 +291,7 @@ function toggleMusic() {
     $("#st-music").text("Music: On");
     music = true;
   }
+  click_sound.play();
 }
 
 // Increase velocity
@@ -329,6 +331,8 @@ function render() {
     //room.animate(GUIcontrols);
     boxesHolder.update(room.car.getPos());
     doorHolder.update();
+    heartHolder.update(room.car.getPos());
+    clockHolder.update(room.car.getPos());
   }
   requestAnimationFrame(render);
   renderer.render(room, room.getCamera());
@@ -357,6 +361,8 @@ $(function () {
   createDistanceBar();
   createParticles();
   createBoxes();
+  createHearts();
+  createClocks();
   createDoors();
   initSound();
 

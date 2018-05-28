@@ -71,12 +71,12 @@ class Car extends THREE.Object3D {
         this.lamp1 = new THREE.SpotLight( 0xffffff, 1, 400 );
         this.lamp2 = new THREE.SpotLight( 0xffffff, 1, 400 );
         this.neon = new THREE.PointLight( 0xFF2E2E, 1, 200);
-        //lamp1.intensity = 0.5;
+        this.lamp1.intensity = this.lamp2.intensity = 1;
         this.lamp1.castShadow = true;
         this.lamp2.castShadow = true;
         this.neon.castShadow = true;
 
-        this.lamp1.penumbra = this.lamp2.penumbra = 0.6;
+        this.lamp1.penumbra = this.lamp2.penumbra = 0.8;
         this.neon.penumbra = 0.5;
 
         this.lamp1.target = this.viewpoint;

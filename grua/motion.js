@@ -2,11 +2,13 @@ var particlesPool = [];
 var particlesInUse = [];
 
 var boxesPool = [];
-var lampPool = [];
+var clockPool = [];
 var doorPool = [];
+var heartsPool = [];
 var listener;
 var sound;
 var audioLoader;
+var lastVelocity;
 
 function initSound() {
     listener = new THREE.AudioListener();
@@ -29,8 +31,32 @@ function loop() {
         doorHolder.spawnDoor();
     }
 
+    if (Math.floor(level.distance) % level.distanceForHeartSpawn == 0 && 
+        Math.floor(level.distance) > level.heartLastSpawn) {
+        level.heartLastSpawn = Math.floor(level.distance);
+        heartHolder.spawnHearts();
+    }
+
+    if (Math.floor(level.distance) % level.distanceForClockSpawn == 0 && 
+        Math.floor(level.distance) > level.clockLastSpawn) {
+        level.clockLastSpawn = Math.floor(level.distance);
+        clockHolder.spawnClock();
+    }
+
     level.distance++;
-    level.velocity = level.velocity * level.acceleration;
+
+    if (level.slowed == 0) {
+        level.velocity = lastVelocity;
+        level.slowed = -1;
+    }
+
+    if (level.slowed == -1)
+        level.velocity = level.velocity * level.acceleration;
+    else {
+        level.velocity = lastVelocity/2;
+        level.slowed--;
+    }
+
     room.setVelocity(level.velocity);
 
     // For each 1000 cms change level
@@ -56,15 +82,17 @@ Particle = function () {
     this.mesh = new THREE.Mesh(geom, mat);
 }
 
-Particle.prototype.explode = function (pos, col, scale) {
+
+
+Particle.prototype.explode = function (pos, col, scale, far) {
 
     var _this = this;
     var _p = this.mesh.parent;
     this.mesh.material.color = new THREE.Color(col);
     this.mesh.material.needsUpdate = true;
     this.mesh.scale.set(scale, scale, scale);
-    var targetX = pos.x + (-1 + Math.random() * 2) * 50;
-    var targetY = pos.y + (-1 + Math.random() * 2) * 50;
+    var targetX = pos.x + (-1 + Math.random() * 2) * far;
+    var targetY = pos.y + (-1 + Math.random() * 2) * far;
     var speed = 0.6 + Math.random() * 0.2;
     TweenMax.to(this.mesh.rotation, speed, { x: Math.random() * 12, y: Math.random() * 12 });
     TweenMax.to(this.mesh.scale, speed, { x: .1, y: .1, z: .1 });
@@ -82,7 +110,7 @@ ParticlesHolder = function () {
     this.particlesInUse = [];
 }
 
-ParticlesHolder.prototype.spawnParticles = function (pos, density, color, scale) {
+ParticlesHolder.prototype.spawnParticles = function (pos, density, color, scale, far) {
 
     var nParticles = density;
     
@@ -99,7 +127,7 @@ ParticlesHolder.prototype.spawnParticles = function (pos, density, color, scale)
         particle.mesh.position.y = pos.y;
         particle.mesh.position.x = pos.x - 8;
         particle.mesh.position.z = pos.z;
-        particle.explode(pos, color, scale);
+        particle.explode(pos, color, scale, far);
     }
     var rand = Math.floor(Math.random()*10);
     
@@ -173,9 +201,45 @@ Box = function () {
     this.mesh.castShadow = true;
 }
 
+Heart = function () {
+    var x = 0; var y = 0;
+    var heartShape = new THREE.Shape();
+    
+    heartShape.moveTo( x + 5, y + 5 );
+    heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+    heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+    heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+    heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+    heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+    heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+    
+    var mat = new THREE.MeshBasicMaterial( {color: Colors.red
+                                         } );
+
+                                        
+    var extrudeSettings = { amount: 1, 
+        bevelEnabled: true, bevelSegments: 20, 
+        steps: 10, bevelSize: 3, bevelThickness: 3 };
+
+    var geom = new THREE.ExtrudeBufferGeometry( heartShape, extrudeSettings );
+  
+    this.mesh = new THREE.Mesh(geom, mat);
+    this.mesh.scale.set(0.6, 0.6, 0.6);
+    this.mesh.rotation.x = (Math.PI/180)*10;
+    this.mesh.rotation.z = (Math.PI/180)*180;
+    this.mesh.position.y = 15;
+    this.mesh.castShadow = true;
+} 
+
 BoxesHolder = function () {
     this.mesh = new THREE.Object3D();
     this.boxesInUse = [];
+}
+
+HeartHolder = function () {
+    this.mesh = new THREE.Object3D();
+    this.heartsInUse = [];
 }
 
 BoxesHolder.prototype.spawnBoxes = function () {
@@ -198,6 +262,21 @@ BoxesHolder.prototype.spawnBoxes = function () {
     }
 }
 
+HeartHolder.prototype.spawnHearts = function () {
+    var width_spawn = 245;
+    var heart;
+    if (heartHolder.length)
+        heart =  HeartsPool.pop();
+    else
+        heart = new Heart();
+
+    heart.mesh.position.x = Math.floor(Math.random() * width_spawn ) - width_spawn/2;
+    heart.mesh.position.z = 500 + Math.floor(Math.random() * 50) - 25;
+
+    this.mesh.add(heart.mesh);
+    this.heartsInUse.push(heart);
+}
+
 BoxesHolder.prototype.update = function (car_position) {
     for (var i = 0; i < this.boxesInUse.length; i++) {
         var box = this.boxesInUse[i];
@@ -209,18 +288,43 @@ BoxesHolder.prototype.update = function (car_position) {
         //console.log(d);
         if (difX < 13 && difZ < 15) {
             //console.log("COLISIONA!!");
-            particlesHolder.spawnParticles(car_position, 15, box.color, 3);
+            particlesHolder.spawnParticles(car_position, 15, box.color, 3, 50);
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
             this.mesh.remove(box.mesh);
             collition();
             i--;
-        } else if (box.mesh.position.z < -450) {
+        } else if (box.mesh.position.z < -500) {
             boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
             this.mesh.remove(box.mesh);
             i--;
         }
     }
 }
+
+HeartHolder.prototype.update = function (car_position){
+    for (var i = 0; i < this.heartsInUse.length; i++) {
+        var heart = this.heartsInUse[i];
+        heart.mesh.position.z -= level.velocity;
+        heart.mesh.rotation.y += 0.07;
+
+        var difX = Math.abs(car_position.x - heart.mesh.position.x);
+        var difZ = Math.abs(car_position.z - heart.mesh.position.z);
+
+        if (difX < 13 && difZ < 15) {
+            particlesHolder.spawnParticles(car_position, 15, Colors.red, 3, 50);
+            heartsPool.unshift(this.heartsInUse.splice(i,1)[0]);
+            this.mesh.remove(heart.mesh);
+            addLife();
+            i--;
+        } else if (heart.mesh.position.z < -500) {
+            heartsPool.unshift(this.heartsInUse.splice(i, 1)[0]);
+            this.mesh.remove(heart.mesh);
+            i--;
+        }
+    }
+}
+
+
 
 function createBoxes() {
     for (var i = 0; i < 10; i++) {
@@ -230,6 +334,16 @@ function createBoxes() {
 
     boxesHolder = new BoxesHolder();
     room.add(boxesHolder.mesh);
+}
+
+function createHearts() {
+    for (var i = 0; i < 10; i++) {
+        var heart = new Heart();
+        heartsPool.push(heart);
+    }
+
+    heartHolder = new HeartHolder();
+    room.add(heartHolder.mesh);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -354,69 +468,80 @@ function createDoors() {
 //                                DOORS                                           //
 ////////////////////////////////////////////////////////////////////////////////////
 
-Lamp = function () {
-    var lamp = new THREE.Object3D();
-    this.lamp = new THREE.Object3D();
+Clock = function () {
+    var clock = new THREE.Object3D();
+    this.clock = new THREE.Object3D();
     var mtlLoader = new THREE.MTLLoader();
     mtlLoader.setPath('models/');
 
-    mtlLoader.load('lamp.mtl', function (materials) {
+    mtlLoader.load('clock.mtl', function (materials) {
         materials.preload();
         var objLoader = new THREE.OBJLoader();
         objLoader.setMaterials(materials);
         objLoader.setPath('models/');
-        objLoader.load('lamp.obj', 
+        objLoader.load('clock.obj', 
         function(object) {
-            object.position.y = 30;
-            object.scale.y = 2;
+            object.position.y = 10;
+            object.scale.set(0.23, 0.23, 0.23);
             object.castShadow = true;
-            lamp.add(object);
+            clock.add(object);
         });
     });
 
-    this.lamp.add(lamp);
+    this.clock.add(clock);
 }
 
-LampHolder = function () {
-    this.lamp = new THREE.Object3D();
-    this.lampsInUse = [];
+ClockHolder = function () {
+    this.clock = new THREE.Object3D();
+    this.clocksInUse = [];
 }
 
-LampHolder.prototype.spawnLamp = function () {
-        var lamp;
+ClockHolder.prototype.spawnClock = function () {
+        var clock;
+        var width_spawn = 230;
         if (doorHolder.length)
-            lamp = LampPool.pop();
+            clock = ClockPool.pop();
         else {
-            lamp = new Lamp();
+            clock = new Clock();
         }
-            
-        //lamp.lamp.position.z = 500 + Math.floor(Math.random() * 50) - 25;
-        lamp.lamp.position.z = 0;
-        this.lamp.add(lamp.lamp);
-        this.lampsInUse.push(lamp);
+        
+        clock.clock.position.x = Math.floor(Math.random() * width_spawn ) - width_spawn/2;
+        clock.clock.position.z = 500 + Math.floor(Math.random() * 50) - 25;
+        this.clock.add(clock.clock);
+        this.clocksInUse.push(clock);
 }
 
-LampHolder.prototype.update = function () {
-    for (var i = 0; i < this.lampsInUse.length; i++) {
-        var lamp = this.lampsInUse[i];
-        //lamp.lamp.position.z -= level.velocity;
+ClockHolder.prototype.update = function (car_position) {
+    for (var i = 0; i < this.clocksInUse.length; i++) {
+        var clock = this.clocksInUse[i];
+        clock.clock.position.z -= level.velocity;
+        clock.clock.rotation.y += 0.05;
 
-        if (lamp.lamp.position.z < -350) {
-            lampPool.unshift(this.lampsInUse.splice(i, 1)[0]);
-            this.lamp.remove(lamp.lamp);
+        var difX = Math.abs(car_position.x - clock.clock.position.x);
+        var difZ = Math.abs(car_position.z - clock.clock.position.z);
+
+        if (difX < 13 && difZ < 15) {
+            particlesHolder.spawnParticles(car_position, 30, 0xffffff, 3, 150);
+            heartsPool.unshift(this.clocksInUse.splice(i,1)[0]);
+            this.clock.remove(clock.clock);
+            ralentize();
+            i--;
+        } else if (clock.clock.position.z < -350) {
+            clockPool.unshift(this.clocksInUse.splice(i, 1)[0]);
+            this.clock.remove(clock.clock);
             i--;
         }
     }
 }
 
-function createLamps() {
+function createClocks() {
     for (var i = 0; i < 2; i++) {
-        var lamp = new Lamp();
-        lampPool.push(lamp);
+        var clock = new Clock();
+        clockPool.push(clock);
     }
 
-    lampHolder = new LampHolder();
-    room.add(lampHolder.lamp);
+    clockHolder = new ClockHolder();
+    room.add(clockHolder.clock);
 }
 
 
@@ -429,6 +554,19 @@ function collition() {
     } else {
         die();
     }
+}
+
+function addLife() {
+    $('#level_bar2').animate({opacity: '1'}, 100);
+    $('#level_bar2').animate({opacity: '0.2'}, 160);
+    $('#level_bar2').animate({opacity: '1'}, 100);
+    level.life = level.life + 10;
+    if (level.life > 100) level.life = 100;
+}
+
+function ralentize() {
+    lastVelocity = level.velocity;
+    level.slowed = 200;
 
 }
 

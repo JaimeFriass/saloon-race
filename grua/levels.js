@@ -14,9 +14,14 @@ function setLevel(num) {
                 nBoxes: 0,
                 distance: 0,
                 life: 1,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 1000,
+                distanceForHeartSpawn: 100,
+                distanceForClockSpawn: 100,
                 lights: true,
                 camera: 1,
             }
@@ -33,9 +38,14 @@ function setLevel(num) {
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 1000,
+                distanceForHeartSpawn: 10000,
+                distanceForClockSpawn: 10000,
                 lights: true,
                 camera: 2,
             }
@@ -50,9 +60,14 @@ function setLevel(num) {
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 100,
+                distanceForHeartSpawn: 1000,
+                distanceForClockSpawn: 1000,
                 lights: true,
                 camera: 1,
             };
@@ -67,9 +82,14 @@ function setLevel(num) {
                 nBoxes: 5,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 60,
+                distanceForHeartSpawn: 400,
+                distanceForClockSpawn: 1000,
                 lights: true,
                 camera: 1,
             };
@@ -85,9 +105,14 @@ function setLevel(num) {
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 10,
+                distanceForHeartSpawn: 400,
+                distanceForClockSpawn: 600,
                 lights: true,
                 camera: 2,
             }
@@ -103,9 +128,14 @@ function setLevel(num) {
                 nBoxes: 2,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
-                distanceForBoxSpawn: 25,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
+                distanceForBoxSpawn: 37,
+                distanceForHeartSpawn: 500,
+                distanceForClockSpawn: 500,
                 lights: false,
                 camera: 2,
             }
@@ -121,9 +151,14 @@ function setLevel(num) {
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 40,
+                distanceForHeartSpawn: 200,
+                distanceForClockSpawn: 500,
                 lights: true,
                 camera: 1,
             }
@@ -134,31 +169,41 @@ function setLevel(num) {
         case 6:
             level = {
                 current: 6,
-                velocity: 6,
+                velocity: 1.3,
                 acceleration: 1.0001,
-                nBoxes: 1,
+                nBoxes: 3,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
-                distanceForBoxSpawn: 70,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
+                distanceForBoxSpawn: 20,
+                distanceForHeartSpawn: 100,
+                distanceForClockSpawn: 500,
                 lights: true,
-                camera: 1,
+                camera: 2,
             }
             document.getElementById("level_id").innerHTML = "Level 6";
-            showText("Level 6", "Fuck u");
+            showText("Level 6", "More boxes!!!!");
             break; 
         case 7:
             level = {
                 current: 7,
-                velocity: 6,
+                velocity: 1.3,
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 70,
+                distanceForHeartSpawn: 100,
+                distanceForClockSpawn: 400,
                 lights: true,
                 camera: 1,
             }
@@ -168,19 +213,24 @@ function setLevel(num) {
         case 8:
             level = {
                 current: 8,
-                velocity: 6,
-                acceleration: 1.0001,
+                velocity: 3,
+                acceleration: 1.0005,
                 nBoxes: 1,
                 distance: 0,
                 life: 100,
+                slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
+                heartLastSpawn: 0,
+                clockLastSpawn: 0,
                 distanceForBoxSpawn: 70,
+                distanceForHeartSpawn: 100,
+                distanceForClockSpawn: 600,
                 lights: true,
                 camera: 1,
             }
-            document.getElementById("level_id").innerHTML = "Level 6";
-            showText("Level 8", "Fuck u");
+            document.getElementById("level_id").innerHTML = "Level 8";
+            showText("Level 8", "No end");
             document.getElementById("level_id").style.color = "red";
             break;
     }
