@@ -1,4 +1,4 @@
-![Saloon Race Logo](grua/imgs/logo_nuevo.png)
+![Saloon Race Logo](play/imgs/logo_nuevo.png)
 
 [Ir al juego](https://www.jaimefrias.es/saloon-race)
 
