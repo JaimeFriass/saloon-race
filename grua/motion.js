@@ -24,7 +24,7 @@ var player = {
 var Store = {
     clock: 200,
     heart: 50,
-    choose_level: 1,
+    choose_level: 800,
 }
 
 function initSound() {
@@ -464,7 +464,7 @@ DoorHolder.prototype.update = function () {
         var door = this.doorsInUse[i];
         door.door.position.z -= level.velocity;
 
-        if (door.door.position.z < -350) {
+        if (door.door.position.z < -420) {
             doorPool.unshift(this.doorsInUse.splice(i, 1)[0]);
             this.door.remove(door.door);
             i--;

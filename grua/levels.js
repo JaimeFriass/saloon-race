@@ -138,7 +138,6 @@ function setLevel(num) {
             document.getElementById("level_id").innerHTML = "Level 4";
             showText("Level 4", "Where are the lights??");
             break; 
-
         case 5:
             level = {
                 current: 5,
@@ -185,7 +184,7 @@ function setLevel(num) {
         case 7:
             level = {
                 current: 7,
-                velocity: 1.3,
+                velocity: 2,
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
@@ -194,10 +193,10 @@ function setLevel(num) {
                 doorLastSpawn: 0,
                 heartLastSpawn: 0,
                 clockLastSpawn: 0,
-                distanceForBoxSpawn: 70,
+                distanceForBoxSpawn: 40,
                 distanceForHeartSpawn: 100,
                 distanceForClockSpawn: 400,
-                lights: true,
+                lights: false,
                 camera: 1,
             }
             document.getElementById("level_id").innerHTML = "Level 7";
@@ -206,7 +205,7 @@ function setLevel(num) {
         case 8:
             level = {
                 current: 8,
-                velocity: 3,
+                velocity: 4,
                 acceleration: 1.0003,
                 nBoxes: 1,
                 distance: 0,

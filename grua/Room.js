@@ -181,7 +181,7 @@ class Room extends THREE.Scene {
 
     // LIGHTS CONTROL
     turnOffLights() {
-        this.spotLight.intensity = this.ambientLight.intensity = 0;
+        this.spotLight.intensity = this.ambientLight.intensity = 0.1;
     }
 
     turnOnLights() {

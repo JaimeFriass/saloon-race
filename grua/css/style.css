@@ -326,3 +326,15 @@ b.key {
 #hearts {
     left: 90px;
 }
+
+/*   HELP    */
+#help {
+    position: absolute;
+    display: none;
+    top: 65%;
+    left: 35%;
+    color: white;
+}
+#help h2 {
+    font-size: 30pt;
+}

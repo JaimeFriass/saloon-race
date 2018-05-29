@@ -188,7 +188,9 @@ function hideStart() {
   document.getElementById("game").style.filter = "none";
   window.addEventListener ("keydown", onKeyDown, false);
   setLevel(1);
-  click_sound.play();
+  click_sound.play(); 
+  $("#help").fadeIn(4000);
+  $("#help").fadeOut(4000);
 }
 
 // RESTART MENU

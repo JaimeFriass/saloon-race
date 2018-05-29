@@ -22,14 +22,16 @@ var GroundTextures = [
 class Saloon extends THREE.Object3D {
     constructor() {
         super();
-        this.walls = null;
-        this.ground = null;
-        //this.carpet = null;
-        this.midWall = null;
-        this.door = null;
-        this.table = new THREE.Object3D();
-        this.box = null;
+        // Level velocity
         this.velocity = 1;
+
+        // Objects
+        //this.table = new THREE.Object3D();
+        this.door = null;
+        this.walls = null;
+        this.createWalls();
+        this.ground = null;
+        this.midWall = null;
 
         // Interleaved grounds
         this.ground1 = this.createGround(GroundTextures[0]);
@@ -42,27 +44,13 @@ class Saloon extends THREE.Object3D {
         this.add(this.ground1);
         this.add(this.ground2);
 
-        this.currentLevel1 = 0;
+        this.currentLevel1 = 0; 
         this.currentLevel2 = 0;
-        this.createWalls();
-        //this.createCarpets();
-        this.createTable();
+        
+        //this.createTable();
     }
 
     createWalls() {
-        var wall1 = new THREE.Mesh(
-            new THREE.BoxGeometry(500, 300, 1),
-            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
-        )
-        wall1.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, 150));
-        //this.add(wall1);
-
-        var wall2 = new THREE.Mesh(
-            new THREE.BoxGeometry(500, 300, 1),
-            new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
-        )
-        wall2.geometry.applyMatrix (new THREE.Matrix4().makeTranslation(0, 150, -150));
-        //this.add(wall2);
         var wall3 = new THREE.Mesh(
             new THREE.BoxGeometry(1, 300, 1000),
             new THREE.MeshPhongMaterial({color:Colors.pink, flatShading: true})
@@ -78,6 +66,7 @@ class Saloon extends THREE.Object3D {
         this.add(wall4);
     }
 
+    // Generate a ground with *texture*
     createGround(texture) {
         var wood = new THREE.TextureLoader().load(texture);
         wood.wrapS = THREE.RepeatWrapping;
@@ -92,26 +81,15 @@ class Saloon extends THREE.Object3D {
         return ground;
     }
 
-    getPosBox() {
-        var globalBoxPosition = new THREE.Vector3();
-        globalBoxPosition.setFromMatrixPosition(this.box.matrixWorld);
-        return globalBoxPosition;
-    }
-
-    getPosition() {
-        return this.box.position;
-    }
-
     updateGround() {
         // Ground
-        if (this.ground1.position.z > -793) {
+        if (this.ground1.position.z > -793)
             this.ground1.position.z = this.ground1.position.z - this.velocity;
-        } else {
+        else {
             
-            if (level.current != this.currentLevel1 ) {
-                //console.log("GROUND 1 = level.current: " + level.current + " currentLevel: " + this.currentLevel1);
+            if (level.current != this.currentLevel1 )
                 this.nextChunk(1);
-            } else {
+            else {
                 if ( this.checkGround(1) )
                     this.ground1.position.z = this.ground_traslation;
             }
@@ -140,12 +118,14 @@ class Saloon extends THREE.Object3D {
         }
 
         // Table
+        /*
         if (this.table.position.z > -700) {
             this.table.position.z = this.table.position.z - this.velocity;
         } else {
             this.table.position.z = 700;
             this.table.position.x = 50 - Math.floor((Math.random() * 100));
         }
+        */
     }
 
     // Creates a dividing wall between different grounds
@@ -168,7 +148,6 @@ class Saloon extends THREE.Object3D {
 
     // Change the ground texture of a *number* ground
     nextChunk(number) {
-        //console.log("NEXT CHUNK: " + number);
         if (number == 1) {
             if ( this.checkGround(1)) {
 
@@ -274,7 +253,7 @@ class Saloon extends THREE.Object3D {
         this.table.add(tabla);
         this.table.position.z = 300;
         this.table.position.x = 100 - Math.floor((Math.random() * 200));
-        this.add(this.table);
+        //this.add(this.table);
     }
 
 }
