@@ -7,6 +7,9 @@ body{
     font-weight: bold;
 }
 
+/*    GAME ELEMENTS        */
+/***************************/
+
 /* Game div, blur while menu is active */
 #game {
     z-index: 1;
@@ -14,6 +17,13 @@ body{
     filter: blur(5px); 
     transition: 0.5s -webkit-filter linear;
 }
+
+#WebGL-output {
+    filter: none;
+    transition: 0.5s -webkit-filter linear;
+}
+
+/* LIFE BAR */
 
 img.img_bar {
     position: absolute;
@@ -38,7 +48,7 @@ img.img_bar {
     background-color: rgba(240, 158, 51, 1);
     border-radius: 2px;
     transition: 0.5s ease-in;
-    background-color: rgb(243, 255, 81);
+    background-color: rgb(255, 174, 81);
 }
 
 #level_id {
@@ -48,11 +58,13 @@ img.img_bar {
     font-style: bold;
     color: black;
     text-shadow: black 2px 2px 2px;
-}
+} 
 
-#distance2 {
+/* DISTANCE BAR */
+
+#distance {
     position: absolute;
-    left: 10px;
+    left: 5px;
     top: 50px;
     width: 6px;
     border-radius: 6px;
@@ -68,22 +80,11 @@ img.img_bar {
     top: 1px;
 }
 
-div.menu {
-    display: none;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 1000px;
-    overflow: hidden;
-    padding-top: 250px;
-    z-index: 99;
-}
+/************************************/
+/*          MENUS                   */
+/************************************/
 
-img.logo {
-    margin-bottom: -90px;
-}
-
+/* ALL MENUS */
 .se-slope{
     margin: 0 -50px;
     transform-origin: left center;
@@ -114,22 +115,38 @@ img.logo {
     color: #e28800;
     padding: 150px 100px 250px 100px;
 }
-    
+
 div.menu h2 {
     font-size: 35pt;
     color: rgb(150, 89, 10);
 }
 
-
 .back {
     background-color: rgb(228, 147, 40) !important;
 }
 
-.back:hover {
-    background-color: rgb(255, 200, 97) !important;
+    .back:hover {
+        background-color: rgb(255, 200, 97) !important;
+    }
+    
+/* PRINCIPAL MENU */
+div.menu {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 1000px;
+    overflow: hidden;
+    padding-top: 250px;
+    z-index: 99;
 }
 
-.se-content a.button, a.btn {
+img.logo {
+    margin-bottom: -90px;
+}
+
+a.button, a.btn {
     font-size: 30pt;
     height: 30px;
     background-color:rgb(255, 221, 128);
@@ -143,24 +160,17 @@ div.menu h2 {
     padding: 15px 15px 15px 15px;
 }
 
-.se-content a.button:hover {
+a.button:hover {
     background-color:rgb(255, 244, 214);
 }
 
+/*     SETTINGS MENU   */
 #settings {
     display: none;
 }
 
 #settings a.button {
     padding: 20px 20px 20px 20px;
-}
-
-#distance {
-    position: absolute;
-    bottom: 5px;
-    left: 5px;
-    color: black;
-    font-size: 20pt;
 }
 
 /*      START        */
@@ -198,6 +208,8 @@ div.menu h2 {
     background-color: rgb(255, 228, 188);
 }
 
+/* DIED MENU */
+
 #restart {
     display: none;
     z-index: 10;
@@ -211,8 +223,10 @@ div.menu h2 {
     cursor: pointer;
 }
 
+/* IN-GAME TITLES */
+
 #text {
-    color: rgb(150, 89, 10);
+    color: rgb(235, 177, 101);
     text-align: center;
     display: none;
     z-index: 2;
@@ -222,13 +236,15 @@ div.menu h2 {
     font-size: 120pt;
     font-style: bold;
     text-shadow: rgb(82, 82, 82) 3px 3px 5px;
-    cursor: pointer;
+    pointer-events: none;
 }
 
 #text p {
     font-size: 40pt;
     margin-top: -20px;
 }
+
+/* CHOOSE LEVEL MENU */
 
 #choose_level {
     display: none;
@@ -256,5 +272,57 @@ div.menu h2 {
 
 #choose_level #back:hover {
     background-color: rgb(240, 192, 131);
+}
 
+/* STORE */
+
+#store a {
+    width: 70px;
+}
+
+a b.price{
+    font-size: 17pt;
+    color: rgb(102, 102, 0);
+
+}
+
+a.disabled {
+    pointer-events: none !important;
+    background-color: rgb(211, 188, 156);
+}
+
+#clocks, #hearts{
+    position: absolute;
+    display: none;
+    bottom: 20px;
+    left: 10px;
+    text-decoration: none;
+}
+
+
+#clocks b, #hearts b {
+    position: absolute;
+    background-color: rgb(231, 207, 154);
+    padding-left: 8px;
+    padding-right: 8px;
+    color: black;
+    border-radius: 9px;
+    font-size: 13pt;
+    z-index: 2;
+    margin-left: -10px;
+}
+
+b.key {
+    position: absolute;
+    background-color: rgb(32, 31, 29) !important;
+    color: white !important;
+    border-radius: 3px !important;
+    font-size: 20pt;
+    bottom: 0px;
+    font-size: 17pt !important;
+}
+
+
+#hearts {
+    left: 90px;
 }

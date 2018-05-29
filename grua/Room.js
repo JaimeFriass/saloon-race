@@ -9,26 +9,24 @@ class Room extends THREE.Scene {
         this.trackballControls = null;
         this.camera = null;
         this.viewpoint = null;
+        
         this.saloon = new Saloon({});
-        this.add(this.saloon);
         this.car = new Car({});
-        this.add(this.car);
         this.createLights();
         this.createCamera(renderer);
-        this.axis = new THREE.AxisHelper (35);
-        this.axis.visible = false;
-        this.add (this.axis);
+
         this.sound = this.createMusic();
+
+        this.add(this.saloon);
+        this.add(this.car);
 
         // Audio in scene
         this.listener = new THREE.AudioListener();
         this.camera.add(this.listener);
         
-
         this.fog = new THREE.Fog(new THREE.Color( 0xF5986E ), 500, 630);
         this.background = new THREE.Color( 0xF5986E );
-        //this.add(this.fog);
-      }
+    }
 
     createMusic() {
         var listener = new THREE.AudioListener();
@@ -42,7 +40,6 @@ class Room extends THREE.Scene {
             sound.setVolume(0.7);
             sound.play();
         });
-
         return sound;
     }
 
@@ -51,6 +48,7 @@ class Room extends THREE.Scene {
         this.saloon.velocity = vel;
     }
 
+    // MUSIC CONTROL
     stopMusic() {
         this.sound.stop();
     }
@@ -61,19 +59,15 @@ class Room extends THREE.Scene {
 
     createCamera (renderer) {
         this.camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-        //this.camera.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
         this.camera.rotation.y = 90 * Math.PI /100;
         this.camera.position.set (0, 200, 100);
         
-        //var look = new THREE.Vector3 (0,0,0);
-        //this.camera.lookAt(look);
         this.add(this.camera);
 
         this.trackballControls = new THREE.TrackballControls (this.camera, renderer);
         this.trackballControls.rotateSpeed = 5;
         this.trackballControls.zoomSpeed = -2;
         this.trackballControls.panSpeed = 0.5;
-        //this.trackballControls.target = look;
 
     }
 
@@ -81,17 +75,12 @@ class Room extends THREE.Scene {
         this.ambientLight = new THREE.AmbientLight(0xccddee, 0.8);
         this.add (this.ambientLight);
 
-        //var skygroundlight = new THREE.HemisphereLight (0xaaaaff, 0xaaffaa);
-        //this.add(skygroundlight);
-
-        // add spotlight for the shadows
         this.spotLight = new THREE.SpotLight( 0xffffff );
         this.spotLight.position.set( 200, 200, 200 );
         this.spotLight.castShadow = true;
 
         this.viewpoint = new THREE.Mesh(new THREE.SphereGeometry(0.5, 50, 50),0);
         this.viewpoint.position.set(0, 40, 0);
-        // the shadow resolution
         this.spotLight.shadow.mapSize.width=2048
         this.spotLight.shadow.mapSize.height=2048;
         this.spotLight.target = this.viewpoint;
@@ -101,6 +90,7 @@ class Room extends THREE.Scene {
         this.add (this.spotLight);
     }
 
+    // Sets a type of camera
     setCamera(type) {
         switch (type) {
             case 1:
@@ -116,6 +106,7 @@ class Room extends THREE.Scene {
         this.voltear = false;
     }
 
+    // Camera update
     updateCamera(type) {
         switch (type) {
             case 1:
@@ -167,6 +158,7 @@ class Room extends THREE.Scene {
         }
     }
 
+    // Room update
     update() {
         this.saloon.updateGround();
         if (this.spotLight.position.z > -700) {
@@ -178,21 +170,16 @@ class Room extends THREE.Scene {
         }
     }
 
-
-
     updateCar(targetX, targetY) {
         // X - IZQ / DER
         // Y - ARRIBA / ABAJO
 
-        this.car.position.x += (targetX - this.car.position.x)*0.1;
-        
+        this.car.position.x += (targetX - this.car.position.x)*0.1;   
         this.car.rotation.y = (targetX - this.car.position.x)*0.0128;
-
-        //this.car.rotation.y = (this.car.position.z - targetX)*0.0064;
-        //this.car.position.x = targetX;
         this.car.position.z = 40 - (targetY - this.car.position.z)*0.4;
     }
 
+    // LIGHTS CONTROL
     turnOffLights() {
         this.spotLight.intensity = this.ambientLight.intensity = 0;
     }

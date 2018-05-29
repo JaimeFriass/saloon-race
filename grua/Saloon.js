@@ -10,12 +10,12 @@ var Colors = {
 var GroundTextures = [
     "imgs/wood.jpg", // LEVEL 0
     "imgs/wood2.jpg", // LEVEL 1
-    "imgs/wood3.jpg", // LEVEL 2
-    "imgs/wood4.jpg", // LEVEL 3
+    "imgs/wood.jpg", // LEVEL 2 WOOD 3 PESADISIMA
+    "imgs/wood2.jpg", // LEVEL 3 WOOD 4 KK
     "imgs/kitchen.jpg", // LEVEL 4
     "imgs/wood5.jpg", // LEVEL 5
     "imgs/wood.jpg", // LEVEL 6
-    "imgs/wood.jpg", // LEVEL 7
+    "imgs/wood2.jpg", // LEVEL 7
     "imgs/wood.jpg", // LEVEL 8
 ]
 
@@ -132,7 +132,6 @@ class Saloon extends THREE.Object3D {
         if (this.midWall != null) {
             if (this.midWall.position.z > -2000) {
                 this.midWall.position.z = this.midWall.position.z - this.velocity;
-                //this.door.position.z = this.door.position.z - this.velocity;
             } else {
                 this.midWall.position.z = -3000;
                 this.remove(this.midWall);
@@ -183,7 +182,7 @@ class Saloon extends THREE.Object3D {
                 // Midwall
                 this.remove(this.midWall);
                 this.midWall = this.createMidWall();
-                this.midWall.position.z = this.ground_traslation/2;
+                this.midWall.position.z = this.ground_traslation - 399;
                 this.add(this.midWall);
             }   
         }
@@ -200,7 +199,7 @@ class Saloon extends THREE.Object3D {
                 // MidWall
                 this.remove(this.midWall);
                 this.midWall = this.createMidWall();
-                this.midWall.position.z = this.ground_traslation/2;
+                this.midWall.position.z = this.ground_traslation - 399;
                 this.add(this.midWall);
             }
         }

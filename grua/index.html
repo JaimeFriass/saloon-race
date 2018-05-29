@@ -14,6 +14,8 @@
     <script type="text/javascript" src="../libs/TweenMax.min.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/TrackballControls.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" 
+            integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <script type="text/javascript" src="Ground.js"></script>    
     <script type="text/javascript" src="Car.js"></script>    
     <script type="text/javascript" src="Room.js"></script>    
@@ -42,7 +44,12 @@
             <div id="level_progress2"></div>
         </div>
 
-        <div id="level_id">Level 1</div>
+        <a href="#" onclick="showPause(); pause = true;"><div id="level_id">Level 1</div></a>
+
+        
+        
+        <a id="clocks" href="#" onclick="use(1)"><img src="imgs/clock.png" width="60" height="60"><b class='key'>C</b><b id='nclocks'>0</b></a>
+        <a id="hearts" href="#" onclick="use(2)"><img src="imgs/heart.png" width="60" height="60"><b class='key'>H</b><b id="nhearts">0</b></a>
     </div>
 
     <!-- GENERAL PAUSE MENU -->
@@ -51,9 +58,13 @@
             <div class="se-content">
                 <img class="logo" src="imgs/logo_black.png" height="230" width="420">
                 <h2>Pause</h2><br>
-                <a class="button" onClick="showChooseLevel()">CHOOSE LEVEL</a>
-                <a class="button" onClick="settings()">SETTINGS</a>
-                <a class="back button" onClick="hidePause()">CLOSE</a>
+                
+                <a class="button" onClick="settings()"><i class="fa fa-cogs"></i> SETTINGS</a>
+                <a class="button" onClick="showStore()"><i class="fa fa-store"></i> STORE</a>
+                <a id="choose_level_btn" class="button disabled" onClick="showChooseLevel()"><i class="fa fa-bars"></i> CHOOSE LEVEL</a>
+
+                <br><br><br><br>
+                <a class="back button" onClick="hidePause()"><i class="fa fa-times"></i> CLOSE</a>
             </div>
         </div>
     </div>
@@ -62,11 +73,42 @@
     <div id="settings" class="menu">
         <div class="se-slope"><br><br>
             <div class="se-content">
-                <a id="st-lights" onclick="toggleLights()" class="button">Lights: </a>
-                <a id="st-velocity" onclick="increaseVelocity()" class="button">Velocity: </a>
-                <a id="st-music" onclick="toggleMusic()" class="button">Music: On</a>
+                <h2 id="current_level"><i class="fa fa-cogs"></i> SETTINGS</h2><br>
+                <a id="st-lights" onclick="toggleLights()" class="button"><i class="fa fa-caret-right"></i> 
+                    Lights: </a>
+                <a id="st-velocity" onclick="increaseVelocity()" class="button"><i class="fa fa-caret-right"></i>  
+                    Velocity: </a>
+                <a id="st-music" onclick="toggleMusic()" class="button"><i class="far fa-music"></i> 
+                    Music: On</a>
                 <br><br><br><br>
                 <a class="back button" onClick="hideSettings()">BACK</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- STORE MENU -->
+    <div id="store" class="menu">
+        <div class="se-slope"><br><br>
+            <div class="se-content">
+                <h2 id="points"><i class="fa fa-coins"></i> Points: </h2><br>
+                <a id="buy_clock" onclick="buy(1)" class="button">
+                    <i class="fa fa-clock"></i>
+                    CLOCK
+                    <b class='price'><script>document.write(Store.clock)</script> <i class="fa fa-coins"></i></b>
+                </a>
+                <a id="buy_heart" onclick="buy(2)" class="button">
+                    <i class="fa fa-heart"></i>
+                    EXTRA HEART
+                    <b class='price'><script>document.write(Store.heart)</script> <i class="fa fa-coins"></i></b>
+                </a>
+                </a>
+                <a id="buy_cmenu" onclick="buy(3)" class="button">
+                    <i class="fa fa-bars"></i>
+                    CHOOSE LEVEL MENU
+                    <b class='price'><script>document.write(Store.choose_level)</script> <i class="fa fa-coins"></i></b>
+                </a>
+                <br><br><br><br>
+                <a class="back button" onClick="hideStore()">BACK</a>
             </div>
         </div>
     </div>
@@ -93,7 +135,7 @@
 
     <div id="start">
         <img class="start_logo" src="imgs/logo_nuevo.png" height="400" width="700">
-        <br><a class="btn" onclick="hideStart()">Start</a>
+        <br><a class="btn" onclick="hideStart()"><i class="fa fa-caret-right"></i> Start</a>
     </div>
 
     <div id="text">
@@ -101,9 +143,7 @@
         <p>Subtitulo</p>
     </div>
 
-    <div id="distance">0</div>
-
-    <div id="distance2"></div>
+    <div id="distance"></div>
     
     <audio id="audio_click">
         <source src="models/click.mp3" type="audio/mpeg">
@@ -113,7 +153,7 @@
     </audio>
 
     <div id="restart">
-        <br><br><a class="btn back" onclick="restart()">Try again</a>
+        <br><br><br><br><a class="btn back" onclick="restart()"><i class="fa fa-play-circle"></i> Try again</a>
     </div>
 </body>
 

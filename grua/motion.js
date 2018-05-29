@@ -10,16 +10,34 @@ var sound;
 var audioLoader;
 var lastVelocity;
 
+// Player variables
+var player = {
+    points: 0,
+    clocks: 0,
+    hearts: 0,
+    choose_level: false,
+    max_level: 1,
+    life: 100,
+}
+
+// Store values
+var Store = {
+    clock: 200,
+    heart: 50,
+    choose_level: 1,
+}
+
 function initSound() {
     listener = new THREE.AudioListener();
     room.camera.add(listener);
     sound = new THREE.Audio(listener);
     audioLoader = new THREE.AudioLoader();
 }
-
 var level;
 
 function loop() {
+
+    // Object spawning settings
     if (Math.floor(level.distance) % level.distanceForBoxSpawn == 0 && 
         Math.floor(level.distance) > level.boxLastSpawn) {
         level.boxLastSpawn = Math.floor(level.distance);
@@ -43,13 +61,12 @@ function loop() {
         clockHolder.spawnClock();
     }
 
-    level.distance++;
-
+    // When clock effect has ended
     if (level.slowed == 0) {
         level.velocity = lastVelocity;
         level.slowed = -1;
+        $('#game').css("filter", "none");
     }
-
     if (level.slowed == -1)
         level.velocity = level.velocity * level.acceleration;
     else {
@@ -64,7 +81,8 @@ function loop() {
         setLevel(level.current + 1);
     }
 
-    document.getElementById("distance").innerHTML = level.distance + " cms";
+    player.points = player.points + 0.1;
+    level.distance++;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -82,8 +100,11 @@ Particle = function () {
     this.mesh = new THREE.Mesh(geom, mat);
 }
 
-
-
+// How a particle explode:
+//  * pos - position
+//  * col - particle color
+//  * scale
+//  * far - max particle distance
 Particle.prototype.explode = function (pos, col, scale, far) {
 
     var _this = this;
@@ -159,18 +180,12 @@ function createParticles() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
-//                        BOXES                                                   //
+//                        BOXES / Obstacles                                       //
 ////////////////////////////////////////////////////////////////////////////////////
 
 var BoxColor = [
-    0xf25346,
-    0xd8d0d1,
-    0x59332e,
-    0xF5986E,
-    0x23190f,
-    0x68c3c0,
+    0xf25346, 0xd8d0d1, 0x59332e, 0xF5986E, 0x23190f, 0x68c3c0,
 ]
-
 
 Box = function () {
     var random = Math.random()*15;
@@ -200,6 +215,71 @@ Box = function () {
     this.mesh.position.y = height/2;
     this.mesh.castShadow = true;
 }
+
+
+BoxesHolder = function () {
+    this.mesh = new THREE.Object3D();
+    this.boxesInUse = [];
+}
+
+BoxesHolder.prototype.spawnBoxes = function () {
+    var width_spawn = 245;
+
+    for (var i = 0; i < level.nBoxes; i++) {
+        var box;
+        if (boxesHolder.length)
+            box = BoxesPool.pop();
+        else {
+            box = new Box();
+        }
+
+        box.mesh.position.x = Math.floor(Math.random() * width_spawn ) - width_spawn/2;
+        box.mesh.position.z = 500 + Math.floor(Math.random() * 50) - 25;
+
+        this.mesh.add(box.mesh);
+        this.boxesInUse.push(box);
+
+    }
+}
+
+
+BoxesHolder.prototype.update = function (car_position) {
+    for (var i = 0; i < this.boxesInUse.length; i++) {
+        var box = this.boxesInUse[i];
+        box.mesh.position.z -= level.velocity;
+
+        //var diffPos = car_position.sub(box.mesh.position.clone());
+        var difX = Math.abs(car_position.x - box.mesh.position.x);
+        var difZ = Math.abs(car_position.z - box.mesh.position.z);
+        //console.log(d);
+        if (difX < 13 && difZ < 15) {
+            //console.log("COLISIONA!!");
+            particlesHolder.spawnParticles(car_position, 15, box.color, 3, 50);
+            boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
+            this.mesh.remove(box.mesh);
+            collition();
+            i--;
+        } else if (box.mesh.position.z < -500) {
+            boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
+            this.mesh.remove(box.mesh);
+            i--;
+        }
+    }
+}
+
+function createBoxes() {
+    for (var i = 0; i < 10; i++) {
+        var box = new Box();
+        boxesPool.push(box);
+    }
+
+    boxesHolder = new BoxesHolder();
+    room.add(boxesHolder.mesh);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+//                                HEARTS                                          //
+////////////////////////////////////////////////////////////////////////////////////
 
 Heart = function () {
     var x = 0; var y = 0;
@@ -232,34 +312,9 @@ Heart = function () {
     this.mesh.castShadow = true;
 } 
 
-BoxesHolder = function () {
-    this.mesh = new THREE.Object3D();
-    this.boxesInUse = [];
-}
-
 HeartHolder = function () {
     this.mesh = new THREE.Object3D();
     this.heartsInUse = [];
-}
-
-BoxesHolder.prototype.spawnBoxes = function () {
-    var width_spawn = 245;
-
-    for (var i = 0; i < level.nBoxes; i++) {
-        var box;
-        if (boxesHolder.length)
-            box = BoxesPool.pop();
-        else {
-            box = new Box();
-        }
-
-        box.mesh.position.x = Math.floor(Math.random() * width_spawn ) - width_spawn/2;
-        box.mesh.position.z = 500 + Math.floor(Math.random() * 50) - 25;
-
-        this.mesh.add(box.mesh);
-        this.boxesInUse.push(box);
-
-    }
 }
 
 HeartHolder.prototype.spawnHearts = function () {
@@ -275,30 +330,6 @@ HeartHolder.prototype.spawnHearts = function () {
 
     this.mesh.add(heart.mesh);
     this.heartsInUse.push(heart);
-}
-
-BoxesHolder.prototype.update = function (car_position) {
-    for (var i = 0; i < this.boxesInUse.length; i++) {
-        var box = this.boxesInUse[i];
-        box.mesh.position.z -= level.velocity;
-
-        //var diffPos = car_position.sub(box.mesh.position.clone());
-        var difX = Math.abs(car_position.x - box.mesh.position.x);
-        var difZ = Math.abs(car_position.z - box.mesh.position.z);
-        //console.log(d);
-        if (difX < 13 && difZ < 15) {
-            //console.log("COLISIONA!!");
-            particlesHolder.spawnParticles(car_position, 15, box.color, 3, 50);
-            boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
-            this.mesh.remove(box.mesh);
-            collition();
-            i--;
-        } else if (box.mesh.position.z < -500) {
-            boxesPool.unshift(this.boxesInUse.splice(i, 1)[0]);
-            this.mesh.remove(box.mesh);
-            i--;
-        }
-    }
 }
 
 HeartHolder.prototype.update = function (car_position){
@@ -322,18 +353,6 @@ HeartHolder.prototype.update = function (car_position){
             i--;
         }
     }
-}
-
-
-
-function createBoxes() {
-    for (var i = 0; i < 10; i++) {
-        var box = new Box();
-        boxesPool.push(box);
-    }
-
-    boxesHolder = new BoxesHolder();
-    room.add(boxesHolder.mesh);
 }
 
 function createHearts() {
@@ -544,13 +563,14 @@ function createClocks() {
     room.add(clockHolder.clock);
 }
 
+// Other functions
 
 function collition() {
-    if (level.life - 15 > 0) { 
+    if (player.life - 15 > 0) { 
         $('#level_bar2').animate({opacity: '1'}, 100);
         $('#level_bar2').animate({opacity: '0.2'}, 160);
         $('#level_bar2').animate({opacity: '1'}, 100);
-        level.life = level.life - Math.floor(Math.random()*10 + level.current);
+        player.life = player.life - Math.floor(Math.random()*10 + level.current*2);
     } else {
         die();
     }
@@ -560,13 +580,14 @@ function addLife() {
     $('#level_bar2').animate({opacity: '1'}, 100);
     $('#level_bar2').animate({opacity: '0.2'}, 160);
     $('#level_bar2').animate({opacity: '1'}, 100);
-    level.life = level.life + 10;
-    if (level.life > 100) level.life = 100;
+    player.life = player.life + 10;
+    if (player.life > 100) player.life = 100;
 }
 
 function ralentize() {
     lastVelocity = level.velocity;
     level.slowed = 200;
+    $('#game').css("filter", "grayscale(50%)");
 
 }
 

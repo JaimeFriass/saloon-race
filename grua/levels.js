@@ -25,7 +25,7 @@ function setLevel(num) {
                 lights: true,
                 camera: 1,
             }
-            showText("You died", "little piece of shit");
+            showText("You died", "Try again. Max. level: " + player.max_level);
             document.getElementById("level_id").innerHTML = "Dead";
             showRestart();
             break;
@@ -37,7 +37,6 @@ function setLevel(num) {
                 acceleration: 1,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -59,7 +58,6 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -73,6 +71,7 @@ function setLevel(num) {
             };
             document.getElementById("level_id").innerHTML = "Level 1";
             showText("Level 1", "Easy for beginners");
+            player.life = 100;
             break;
         case 2:
             level = {
@@ -81,15 +80,14 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 5,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
                 heartLastSpawn: 0,
                 clockLastSpawn: 0,
                 distanceForBoxSpawn: 60,
-                distanceForHeartSpawn: 400,
-                distanceForClockSpawn: 1000,
+                distanceForHeartSpawn: 900,
+                distanceForClockSpawn: 9999,
                 lights: true,
                 camera: 1,
             };
@@ -104,7 +102,6 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -112,7 +109,7 @@ function setLevel(num) {
                 clockLastSpawn: 0,
                 distanceForBoxSpawn: 10,
                 distanceForHeartSpawn: 400,
-                distanceForClockSpawn: 600,
+                distanceForClockSpawn: 9999,
                 lights: true,
                 camera: 2,
             }
@@ -127,7 +124,6 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 2,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -135,7 +131,7 @@ function setLevel(num) {
                 clockLastSpawn: 0,
                 distanceForBoxSpawn: 37,
                 distanceForHeartSpawn: 500,
-                distanceForClockSpawn: 500,
+                distanceForClockSpawn: 700,
                 lights: false,
                 camera: 2,
             }
@@ -150,7 +146,6 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -173,7 +168,6 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 3,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -195,7 +189,6 @@ function setLevel(num) {
                 acceleration: 1.0001,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
@@ -208,22 +201,21 @@ function setLevel(num) {
                 camera: 1,
             }
             document.getElementById("level_id").innerHTML = "Level 7";
-            showText("Level 7", "Fuck u");
+            showText("Level 7", "Continue if you can");
             break;
         case 8:
             level = {
                 current: 8,
                 velocity: 3,
-                acceleration: 1.0005,
+                acceleration: 1.0003,
                 nBoxes: 1,
                 distance: 0,
-                life: 100,
                 slowed: -1,
                 boxLastSpawn: 0,
                 doorLastSpawn: 0,
                 heartLastSpawn: 0,
                 clockLastSpawn: 0,
-                distanceForBoxSpawn: 70,
+                distanceForBoxSpawn: 46,
                 distanceForHeartSpawn: 100,
                 distanceForClockSpawn: 600,
                 lights: true,
@@ -238,5 +230,7 @@ function setLevel(num) {
     setLights(level.lights);
     if (previous_camera != level.camera)
         room.setCamera(level.camera);
+    if (level.current > player.max_level)
+        player.max_level = level.current;
 
 }

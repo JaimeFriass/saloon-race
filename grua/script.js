@@ -22,10 +22,7 @@ pause = false;
 click_sound = null;
 text_sound = null;
 music = true;
-
 died = false;
-
-crash = false;
 
 /// It creates the GUI and, optionally, adds statistic information
 /**
@@ -78,16 +75,22 @@ function onMouseMove(event) {
 function onKeyDown(event) {
   event = event || window.event;
   var keycode = event.keyCode;
-
+  console.log(keycode);
   switch(keycode) {
     case 32: // SPACE BAR
       if (!pause && !died) {
         showPause();
         pause = true;
-      } else if (pause) {
+      } else if (pause && $('#pause').css("display") != "none") {
         hidePause();
         pause = false;
       }
+      break;
+    case 67: // C
+      use(1);
+      break;
+    case 72: // H
+      use(2);
       break;
   }
 }
@@ -102,13 +105,6 @@ function onMouseWheel (event) {
     room.getCameraControls().enabled = true;
   } else {  
     room.getCameraControls().enabled = false;
-    if (mouseDown) {
-      switch (applicationMode) {
-        case Theroom.MOVING_BOXES :
-          room.moveBox (event, Theroom.ROTATE_BOX);
-          break;
-      }
-    }
   }
 }
 
@@ -140,22 +136,26 @@ function normalize(v, vmin, vmax, tmin, tmax) {
 } 
 
 function updateLife() {
-  document.getElementById("level_progress2").style.width = level.life + "%";
-  //document.getElementById("level_progress2").style.backgroundColor = "rgb(243, 255, 81)";
+  document.getElementById("level_progress2").style.width = player.life + "%";
+  if (player.life > 85) {
+    $('#level_progress2').css('backgroundColor', 'rgb(159, 255, 81)');
+  } else if (player.life > 30) {
+    $('#level_progress2').css('backgroundColor', 'rgb(243, 255, 81)');
+  } else {
+    $('#level_progress2').css('backgroundColor', 'rgb(255, 174, 81)');
+  }
 }
 
 // PAUSE MENU
 
 function showPause() {
   document.getElementById("game").style.filter = "blur(5px)";
-  //document.getElementById("pause").style.display = "block";
   $("#pause").fadeIn(500);
   
 }
 
 function hidePause() {
   document.getElementById("game").style.filter = "none";
-  //document.getElementById("pause").style.display = "none";
   $("#pause").fadeOut(500);
   pause = false;
   click_sound.play();
@@ -208,8 +208,8 @@ function restart() {
 
 function showChooseLevel() {
   $("#pause").fadeOut(500);
-  $("#choose_level").fadeIn(500);
   $("#current_level").html("Current level: " + level.current);
+  $("#choose_level").fadeIn(500);
 }
 
 function hideChooseLevel() {
@@ -220,7 +220,7 @@ function hideChooseLevel() {
 
 // Set a level
 function settingLevel(number) {
-  $("#choose_level").fadeOut(500);
+  $("#choose_level").fadeOut(500); 
   document.getElementById("game").style.filter = "none";
   setLevel(number);
   click_sound.play();
@@ -234,13 +234,109 @@ function showText(title, subtitle) {
   text_sound.play();
 }
 
+// STORE MENU
+function showStore() {
+  $("#pause").fadeOut(500);
+  $("#store").fadeIn(500);
+  refreshStore();
+  click_sound.play();
+}
+
+function hideStore() {
+  $("#store").fadeOut(500);
+  $("#pause").fadeIn(500);
+  click_sound.play();
+}
+
+function buy(item) {
+  switch (item) {
+    case 1: // CLOCK
+      if (player.points >= Store.clock) {
+        player.clocks++;
+        player.points -= Store.clock;
+      } else {
+
+      }
+      break;
+    case 2: // HEART
+      if (player.points >= Store.heart) {
+        player.hearts++;
+        player.points -= Store.heart;
+      } else {
+
+      }
+      break;
+    case 3: // CHOOSE LEVEL MENU
+      if (player.points >= Store.choose_level) {
+        player.choose_level = true;
+        player.points -= Store.choose_level;
+      }
+  }
+  refreshStore();
+}
+
+function use(item) {
+  switch (item) {
+    case 1: // CLOCK
+      if (player.clocks > 0 && level.slowed == -1) {
+        player.clocks--;
+        ralentize();
+      }
+      break; 
+    case 2: // HEART
+      if (player.hearts > 0 && player.life != 100) {
+        player.hearts--;
+        addLife();
+      }
+      break;
+  }
+  refreshStore();
+
+}
+
+function refreshStore() {
+  $("#points").html("Points: " + Math.floor(player.points));
+
+  if (player.points >= Store.clock)
+    $('#buy_clock').removeClass("disabled");
+  else
+    $('#buy_clock').addClass("disabled");
+
+  if (player.points >= Store.heart)
+    $('#buy_heart').removeClass("disabled");
+  else
+    $('#buy_heart').addClass("disabled");
+
+  if (player.clocks > 0) {
+    $('#clocks').css("display", "block");
+    $('#nclocks').html(player.clocks);
+  } else {
+    $('#clocks').css("display", "none");
+  }
+
+  if (player.hearts > 0) {
+    $('#hearts').css("display", "block");
+    $('#nhearts').html(player.hearts);
+  } else {
+    $('#hearts').css("display", "none");
+  }
+
+  if (player.choose_level) {
+    $('#choose_level_btn').removeClass('disabled');
+    $('#buy_cmenu').addClass('disabled');
+  } else {
+    $('#choose_level_btn').addClass('disabled');
+    $('#buy_cmenu').removeClass('disabled');
+  }
+}
+
 // Set the lights on or off
 function setLights(light) {
   if (light) {
     room.turnOnLights();
     room.car.turnOffLamps();
-    $("#text").css("color", "rgb(150, 89, 10)");
-    $("#level_id").css("color", "rgb(150, 89, 10)");
+    $("#text").css("color", "rgb(235, 177, 101)");
+    $("#level_id").css("color", "rgb(235, 177, 101)");
   } else {
     room.turnOffLights();
     room.car.turnOnLamps();
@@ -253,9 +349,11 @@ function setLights(light) {
 function toggleLights() {
   if (level.lights) {
     setLights(false);
+    level.lights = false;
     $("#st-lights").text("Lights: Off");
   } else {
     setLights(true);
+    level.lights = true;
     $("#st-lights").text("Lights: On");
   }
   click_sound.play();
@@ -274,14 +372,13 @@ function updateCar() {
       room.updateCar(-targetX, targetY);
     }
   } else {
-    //console.log("POS X: " + room.car.getPos().x + " POS Z: " + room.car.getPos().z);
     room.car.position.y = room.car.position.y + 0.5;
     room.car.position.z = room.car.position.z - 1;
 
   }
 }
 
-// Toggle the m usic between on or off
+// Toggle the music between on or off
 function toggleMusic() {
   
   if (music) {
@@ -304,19 +401,15 @@ function increaseVelocity() {
 
 function createDistanceBar() {
   var height = $('body').height();
-  /*
-  if (height > 700) {
-    $('#distance2').css("height", "500px");
-  } else if (height > 500) {
-    $('#distance2').css("height", "350px");
-  } else if (height > 250) {
-    $('#distance2').css("height", "200px");
-  */
-  $('#distance2').css("height", height*0.8 + "px");
+  $('#distance').css("height", height*0.8 + "px");
 }
 
 function updateDistance() {
-  $('#distance2').css("height", ($('body').height()*0.8)* (level.distance/1000) + "px");
+  if (level.current != 8 && level.current != -1) {
+    $('#distance').css("height", ($('body').height()*0.8)* (level.distance/1000) + "px");
+  } else {
+    $('#distance').css("height", "0px");
+  }
 }
 
 /// It renders every frame
@@ -330,7 +423,8 @@ function render() {
     updateCar();
     //stats.update();
     room.getCameraControls().update ();
-    //room.animate(GUIcontrols);
+
+    // Objects
     boxesHolder.update(room.car.getPos());
     doorHolder.update();
     heartHolder.update(room.car.getPos());
