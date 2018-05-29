@@ -5,9 +5,11 @@ var boxesPool = [];
 var clockPool = [];
 var doorPool = [];
 var heartsPool = [];
+
 var listener;
 var sound;
 var audioLoader;
+
 var lastVelocity;
 
 // Player variables
@@ -247,11 +249,12 @@ BoxesHolder.prototype.update = function (car_position) {
     for (var i = 0; i < this.boxesInUse.length; i++) {
         var box = this.boxesInUse[i];
         box.mesh.position.z -= level.velocity;
-
-        //var diffPos = car_position.sub(box.mesh.position.clone());
+        
+        // Distance between car and box
         var difX = Math.abs(car_position.x - box.mesh.position.x);
         var difZ = Math.abs(car_position.z - box.mesh.position.z);
-        //console.log(d);
+
+        // If colides
         if (difX < 13 && difZ < 15) {
             //console.log("COLISIONA!!");
             particlesHolder.spawnParticles(car_position, 15, box.color, 3, 50);
@@ -341,6 +344,7 @@ HeartHolder.prototype.update = function (car_position){
         var difX = Math.abs(car_position.x - heart.mesh.position.x);
         var difZ = Math.abs(car_position.z - heart.mesh.position.z);
 
+        // If colides
         if (difX < 13 && difZ < 15) {
             particlesHolder.spawnParticles(car_position, 15, Colors.red, 3, 50);
             heartsPool.unshift(this.heartsInUse.splice(i,1)[0]);
@@ -553,6 +557,7 @@ ClockHolder.prototype.update = function (car_position) {
     }
 }
 
+// Initial creation
 function createClocks() {
     for (var i = 0; i < 2; i++) {
         var clock = new Clock();
@@ -564,7 +569,9 @@ function createClocks() {
 }
 
 // Other functions
+/////////////////////
 
+// Colision with a box
 function collition() {
     if (player.life - 15 > 0) { 
         $('#level_bar2').animate({opacity: '1'}, 100);
@@ -576,6 +583,7 @@ function collition() {
     }
 }
 
+// Heart effect
 function addLife() {
     $('#level_bar2').animate({opacity: '1'}, 100);
     $('#level_bar2').animate({opacity: '0.2'}, 160);
@@ -584,6 +592,7 @@ function addLife() {
     if (player.life > 100) player.life = 100;
 }
 
+// Clock effect
 function ralentize() {
     lastVelocity = level.velocity;
     level.slowed = 200;
@@ -591,6 +600,7 @@ function ralentize() {
 
 }
 
+// When the player dies
 function die() {
     setLevel(-1);
     died = true;
